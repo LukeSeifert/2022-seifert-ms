@@ -1,0 +1,26 @@
+\renewcommand*\descriptionlabel[1]{\hspace\leftmargin$#1$}
+\setcounter{tocdepth}{5}
+\setcounter{secnumdepth}{5}
+
+\section{Comparison of Continuous and Batchwise Reprocessing Methods}
+
+In this work, the differences and similarities between continuous and batchwise reprocessing have been discussed. Overall, it was shown that in terms of step size, computational cost, and steady state relative error, the continuous reprocessing method yields better results when handling continuous online reprocessing of an MSR.
+
+For step sizes, it was shown mathematically how implementing larger depletion step sizes with a batchwise reprocessing method causes the relative steady state error to become larger. It was also shown that this error corresponds to the cycle time of the elemental target, meaning that the maximum depletion time step which will yield valid results is dependent upon the reprocessing scheme of the given reactor. For continuous reprocessing, the depletion time step is instead limited by updating the simulation data and does not depend on the reprocessing scheme, allowing for greater flexibility.
+
+\section{Continuous Reprocessing Investigations}
+
+Because the continuous reprocessing method provides many benifits when compared to the batchwise reprocessing method, investigating weaknesses in the method is important. One of these weaknesses which was investigated in this work was the mass balancing of the fuel salt in the simulation.
+
+DATA
+
+This work also discussed how continuous methods compared to each other and how continuous methods could approximate a batchwise method. DATA 
+
+\section{Future Work}
+
+There are a few areas in which this work should be continued. The first area of interest would be analysis of more specific works which have implemented batchwise reprocessing to simulate a continuous reprocessing scheme. This analysis could include replicating the results using continuous reprocessing, determining what level of error to expect for different isotopes, or analysis of depletion step size implemented in comparison to the reprocessing scheme cycle times provided. Alternatively, works which have implemented continuous reprocessing could have the net mass and feed rates analyzed to determine if the simulation may have had any unexpected results due to density variations which would not have physically occured.
+
+Another area of interest is longer net depletion time analysis. This is more difficult to perform for the batchwise reprocessing methods, as the depletion time steps must be kept shorter and the SaltProc tool currently requires double running each time step. However, it would be useful to generate very long net depletion time results to compare with the steady state error mathematical model predictions. Additionally, the difference between various neutronics parameters could also be compared.
+
+One final area which could be further explored is the error analysis, which in this work only covered steady state relative error of an isotopes concentration in a generic sense. Work could be done to determine the error at each time step to better analyze systems which have not achieved steady state. The error analysis could also include variable depletion time steps instead of requiring a set depletion time step to be valid. 
+
