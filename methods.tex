@@ -1,9 +1,20 @@
+
 \renewcommand*\descriptionlabel[1]{\hspace\leftmargin$#1$}
 \setcounter{tocdepth}{5}
 \setcounter{secnumdepth}{5}
 
+%\section{Notes}
 
-
+%A 1-gpm
+%(0.06 liter/sec) side stream of the primary salt is
+%continuously processed to remove
+% 233 P a , to recover the
+%bred
+% 233 U , and to adjust the fissile content. Robertson summary
+ 
+% Robertson does not define thorium feed rate?
+ 
+% Serpent2 continuous reprocessing section cite own presentations at Serpent user group meetings
 
 \section{Batchwise Reprocessing}
 
@@ -22,14 +33,14 @@ For the refueling of the reactor, the thorium feed rate was set to maintain the 
 
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.7]{images/Th232rem_massv01.png}
+  \includegraphics[scale=0.5]{images/Th232rem_massv01.png}
   \caption{Thorium feed rate in the MSBR as a function of time while using bulk batchwise reprocessing \cite{rykhlevskii_advanced_2018}.}
    \label{fig:Th-feed-v1}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.7]{images/Pa233rem_massv01.png}
+  \includegraphics[scale=0.5]{images/Pa233rem_massv01.png}
   \caption{Uranium feed rate in the MSBR as a function of time while using bulk batchwise reprocessing \cite{rykhlevskii_advanced_2018}.}
    \label{fig:U-feed-v1}
 \end{figure}
@@ -42,9 +53,25 @@ Another difference is that this version makes use of the h5py Python package to 
 
 SaltProc version 0.3 includes an example MSBR which users can run as soon as SaltProc is installed, though some of the run parameters such as neutrons per generation and run time have to be altered to generate a more valid model. This model also uses 3 day steps, but instead of performing the batch removal only at the cycle time value, this model removes a fraction every 3 days, which is called the "Steady" approach for batchwise reprocessing.
 
-For example, a 30 day cycle time would result in 10\% removal every 3 days. This more accurately models online reprocessing, which is primarily what the MSBR employs in its reprocessing scheme aside from the salt discard.
+For example, a 30 day cycle time would result in 10\% removal every 3 days. This more accurately models online reprocessing, which is primarily what the MSBR employs in its reprocessing scheme. However, this steady version of SaltProc also makes some minor changes to the reprocessing scheme by adding in efficiency terms. These changes act as a multiplier on the reprocessing constant, where 100\% efficiency makes no change and 0\% makes the reprocessing constant become 0. These changes are as follows: xenon uses 91.2\% removal over three days instead of 100\%, krypton uses 91.5\% removal over three days instead of 100\%, protactinium uses 9.5\% removal over three days instead of 100\%, and the discard has a removal of 0.9\% over three days instead of 0.09\%.
 
 The reactor refueling is performed slightly differently from v0.1 as well. This version assumes a constant ratio between the uranium refueling and the thorium refueling. The net refueling for each 3 day depletion step is set to maintain the mass of the system. Thus, the average values of 2.38 kg/day and 2.31 kg/day for thorium-232 and uranium-233, respectively, are used to determine the ratio of uranium to thorium which is implemented.
+
+Figures \ref{fig:Th-feed-v3} and \ref{fig:U-feed-v3} show the refueling rate of thorium-232 and uranium-233, respectively, using a depletion step size of 3 days over a net time of 90 days. The average feed rates of the thorium-232 and uranium-233 are 1.24 and 1.21 kg/day. The reasons for the difference are because the smaller efficiencies cause less mass loss, a shorter time frame is covered, and the protactinium removal is much less, resulting in a much smaller uranium-233 feed.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{images/feed_Th232_3d_90d.png}
+  \caption{Thorium feed rate with a depletion time step of 3 days in the MSBR as a function of time while using steady batchwise reprocessing.}
+   \label{fig:Th-feed-v3}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{images/feed_U233_3d_90d.png}
+  \caption{Uranium feed rate with a depletion time step of 3 days in the MSBR as a function of time while using steady batchwise reprocessing.}
+   \label{fig:U-feed-v3}
+\end{figure}
 
 Additionally, this version of SaltProc uses the PyTables Python package for handling the hdf5 data files. The data files are structured similarly to v0.1 of SaltProc, but instead of atom density they use mass, which makes analysis of the files slightly more user friendly.
 
@@ -594,6 +621,8 @@ Table \ref{tab:repr_decay_view_full} shows all the different decay based continu
 \end{tabular}
 \end{center}
 \end{table}
+
+The values shown in Table \ref{tab:repr_decay_view_full} for the SaltProc-type continuous methods are based on the cycle times given from the Robertson report, which matches what is used in the bulk SaltProc, version 0.1, results. The steady SaltProc results, verson 0.3, do not use these exact values \cite{robertson_conceptual_1971, rykhlevskii_advanced_2018}. The differences in steady SaltProc are as follows: xenon has 91.2\% removal over three days instead of 100\%, krypton has 91.5\% removal over three days instead of 100\%, protactinium has 9.5\% removal over three days instead of 100\%, and the discard has a removal of 0.9\% over three days instead of 0.09\%. %Check Pa, SaltProc actually using 9.5%?????????
 
 %WHICH IS THE MORE ACCURATE APPROACH AMONG THE THREE (There isn't a way to validate this without more information on how cycle time is generated. Perhaps if instead we find data for molten salt reprocessing and compare against that it might be useful?) (Maybe check average net atoms for steady and bulk batch and compare, then maybe check a comparison of net atoms at 1/2 cycle time and cycle time, etc.)
 

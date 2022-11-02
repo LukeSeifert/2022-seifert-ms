@@ -23,7 +23,7 @@ A depletion step mesh refinement study using the bulk batchwise reprocessing ver
 
 Based on this previous work, this work instead checks 1, 1.5, 3, and 6 day depletion steps for the steady batchwise reprocessing method which is now used in SaltProc. This is to check if a smaller step size than 3 days should be implemented, or if the accuracy gained is not worth the increased computational cost. Previously, Rykhlevskii used a 3 day depletion step in the bulk batchwise analysis of the MSBR over 20 years \cite{rykhlevskii_advanced_2018}. Considering the computational cost increases associated with using a smaller depletion step size, this depletion step size selection was well made. Therefore, for the longer net depletion time results, the 3 day depletion step will also be used. However, it is still beneficial to check how the 3 day depletion step results would compare to longer and shorter depletion times.
 
-Although the cycle time was previously implemented as 100\% removal, the krypton and xenon removal is instead around 91\%. This is because of the different liquid phase mass transfer coefficient, and was discussed by Rykhlevskii previously \cite{rykhlevskii_fuel_2020}. For the other elements, a fixed value is assumed. One difference this has is that instead of having a mass of zero in the xenon-135 and xenon-136 figures, there will be plot showing how the xenon concentrations vary over time.
+Although the cycle time was previously implemented as 100\% removal, the krypton and xenon removal is instead around 91\%. This is because of the different liquid phase mass transfer coefficient, and was discussed by Rykhlevskii previously \cite{rykhlevskii_fuel_2020}. For the other elements, a fixed value is assumed. One difference this has is that instead of having a mass of zero in the xenon-135 and xenon-136 figures, there will be plot showing how the xenon concentrations vary over time. Additionally, the protactinium removal is 9.5\% instead of 95\% every three days, which results in a shift in the average feed rates which were determined in the bulk batchwise SaltProc solution.
 
 \paragraph{Effects of Reprocessing}
 
@@ -110,7 +110,7 @@ Figures \ref{fig:steady-batch-xe135-repr} and \ref{fig:steady-batch-xe136-repr} 
 
 For the batchwise methods, depletion time steps beyond 6 days are not considered. This is because a larger time step causes more error, and it can be seen that the difference between the 6 day depletion step and the smaller depletion steps is non-negligible.
 
-For the continuous methods, the error buildup from using larger depletion steps is purely due to not updating various simulation data rather than from lack of updating the material compositions based on reprocessing. Due to this, larger time steps can be considered. In order to determine the impact of the updated simulation data, initially chosen depletion time steps of 1, 3, 6, 15, and 30 days are implemented. Additionally, although different continuous methods have been introduced, the depletion step mesh refinement only needs to consider one of the methods. This is because the continuous methods used all have the same general form and only alter the specific reprocessing constants implemented. Thus, the direct linear method is selected to determine the optimal depletion step size for the continuous methods.
+For the continuous methods, the error buildup from using larger depletion steps is purely due to not updating various simulation data rather than from lack of updating the material compositions based on reprocessing. Due to this, larger time steps can be considered. In order to determine the impact of the updated simulation data, initially chosen depletion time steps of 1, 3, 6, 15, and 30 days are implemented. Additionally, although different continuous methods have been introduced, the depletion step mesh refinement only needs to consider one of the methods. This is because the continuous methods used all have the same general form and only alter the specific reprocessing constants implemented. Thus, the direct linear method is selected to determine the optimal depletion step size for the continuous methods. Additionally, it has been used in several other works and is very similar to the Cycle Rate method \cite{xia_development_2019, nuttin_potential_2005, zhou_fuel_2018}.
 
 \subsubsection{Smaller Depletion Steps}
 
@@ -258,9 +258,10 @@ Because it was previously shown for continuous reprocessing that the depletion s
 
 %From the thorium-232 and uranium-233 mass results, it can be seen Cases D and F are outliers. The trait in common with these two runs is the largest depletion step size implemented, as both of these runs have larger depletion step sizes than any of the other runs, resulting in far fewer simulations performed.
 
-For the result of the effective multiplication factor, the difference from Case A was taken for the rest of the cases. These results show that Cases B, C, and E are all very close to Case A. Cases D and E are the outliers, which is also reflected in the number of simulations run. Case D uses a short depletion time step initially followed by a single long step, which should have allowed for the simulation data to update based on the presence of fission products which were not initially present. It seems that multiple steps are needed during the first 360 days of operation in order to properly account for the changes within the reactor, such as Case E, which leads with a depletion step size of 180 days but then proceeds to follow it with six 30 day depletion steps.
+For the result of the effective multiplication factor, the difference from Case A was taken for the rest of the cases. These results show that Cases B, C, and E are all very close to Case A. Cases D and E are the outliers, which is also reflected in the number of simulations run. Case D uses a short depletion time step initially followed by a single long step, which should have allowed for the simulation data to update based on the presence of fission products which were not initially present.
+However, this impact is likely offset by the continuous reprocessing, resulting in more impact purely due to the general changes in the system. It seems that multiple steps are needed during the first 360 days of operation in order to properly account for the changes within the reactor, such as Case E, which leads with a depletion step size of 180 days but then proceeds to follow it with six 30 day depletion steps.
 
-The variable depletion step size could be considered to have an impact if the reactor were at steady-state, but after only 360 days of operation, there are still changes occuring \cite{rykhlevskii_advanced_2018}. This is the reason why having more simulations yielded better results than the cases which had fewer simulations.
+The variable depletion step size could be considered to have an impact if the reactor were at steady-state, but after only 360 days of operation, there are still changes occurring \cite{rykhlevskii_advanced_2018}. This is the reason why having more simulations yielded better results than the cases which had fewer simulations.
 
 \subsection{Computational Cost Analysis}
 
@@ -343,52 +344,127 @@ There are many different works which have implemented batchwise reprocessing com
 
 \subsection{Continuous Methods}
 
-Although only the Direct Linear continuous reprocessing method has been used so far due to similarities between the continuous methods, it is still useful to determine how the different continuous methods compare in the MSBR.  Figures \ref{fig:optimal-compare-sspdldl-3} through \ref{fig:SPCR-cont-136Xe-3} show how each of the continuous methods compare to each other. For this comparison, the SaltProc-based average uranium-233 feed rate is used as well as a 30 day depletion step size.
+Although only the Direct Linear continuous reprocessing method has been used so far due to similarities between the continuous methods, it is still useful to determine how the different continuous methods compare in the MSBR.   For this comparison, the steady SaltProc-based averaged feed rates and modified cycle times are used as well as a 30 day depletion step size.
+
+
+The effective multiplication factor, over the course of 360 days, has a difference on the order of 500pcm between the Cycle Time Decay, CTD, method and the Direct Linear and Cycle Rate, DL and CR, methods respectively. The Direct Linear and Cycle Rate methods are very close to each other, which is expected since the reprocessing constants are also very similar. The control method, CTRL, shows the effects of no reprocessing and no feed.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.1]{images/placeholder.png}
-  \caption{k$_{eff}$ over time with small depletion steps for steady batchwise, SaltProc Direct Linear continuous, and Direct Linear continuous reprocessing.}
-   \label{fig:optimal-compare-sspdldl-3}
+  \includegraphics[scale=0.5]{images/cont-compare-keff-1.png}
+  \caption{k$_{eff}$ over time comparing different continuous reprocessing methods.}
+   \label{fig:continuous-compare}
 \end{figure}
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[scale=0.1]{images/placeholder.png}
-  \caption{\ce{^{235}U} over time with small depletion steps for steady batchwise, SaltProc Direct Linear continuous, and Direct Linear continuous reprocessing.}
-   \label{fig:SPCR-cont-235u-3}
-\end{figure}
+The reason the continuous methods shown here continue decreasing and are eventually overtaken by the control reprocessing is due to the protactinium reprocessing. Because the protactinium in these methods is continuously removed and the uranium-233 feed is averaged only over the first 90 days of the steady batchwise method, it is expected that the continuous model will become inaccurate some time after 90 days. This accuracy can be improved by implementing the advanced protactinium decay model which removes the dependency on an average uranium-233 feed rate.
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[scale=0.1]{images/placeholder.png}
-  \caption{\ce{^{135}Xe} over time with small depletion steps for steady batchwise, SaltProc Direct Linear continuous, and Direct Linear continuous reprocessing.}
-   \label{fig:SPCR-cont-135Xe-3}
-\end{figure}
+However, the main purpose of this figure is to demonstrate how the different continuous methods compare to each other over a long period of time. Additionally, this figure shows how the effective multiplication factor without reprocessing drops below critical after roughly 300 days, and that having either a good estimate for the uranium-233 feed rate or a continuous method to generate the uranium-233 feed rate is very important for depletion modeling of the MSBR.
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[scale=0.1]{images/placeholder.png}
-  \caption{\ce{^{136}Xe} over time with small depletion steps for steady batchwise, SaltProc Direct Linear continuous, and Direct Linear continuous reprocessing.}
-   \label{fig:SPCR-cont-136Xe-3}
-\end{figure}
 
 \subsection{Continuous and Batchwise Methods}
 
-\subsubsection{Continuous Approximating Batchwise Methods}
+The continuous method selected for the comparison is the Direct Linear reprocessing method. For the batchwise methods, the bulk and steady batchwise reprocessing schemes from SaltProc early and current versions are used. For the bulk batchwise reprocessing, the cycle times from the Robertson report are followed \cite{robertson_conceptual_1971}. Additionally, the uranium-233 and thorium-232 feed rates in the continuous model use the values from the bulk batchwise results \cite{rykhlevskii_advanced_2018}.
 
-SPCR, SPCTD, SPDL
+For the steady batchwise comparison, the modified cycle times are used which include an efficiency term on the xenon, krypton, and protactinium reprocessing constants. For the continuous comparison, the average thorium-232 and uranium-233 feed rates are generated from the 90 day runs and are implemented.
+
+For all of these comparisons, the Direct Linear reprocessing method uses the average feed rate of the given batchwise method and the cycle times from the Robertson report \cite{robertson_conceptual_1971}. The SaltProc Direct Linear reprocessing method, which is intended to be a continuous approximation of the batchwise reprocessing method, will match the reprocessing constants used in the given batchwise method.
+
+If the results are sufficiently close, then it may be reasonable for a continous method to be implemented in place of a batchwise method when the reprocessing scheme calls for a physically batchwise processes. This would allow for reduced computational cost and potentially large depletion step sizes to be implemented. If the results are not close, then these results will provide information on how the difference in reprocessing methods can affect results.
 
 
-\subsubsection{Continious Compared to Batchwise Methods}
+\subsubsection{Continuous and Bulk Batchwise Methods}
 
-DL with Batch
+In this comparison, there are three different methods considered. These methods are the continuous Direct Linear, DL, method, the continuous SaltProc Direct Linear, SPDL, method; and the bulk batchwise SaltProc method. Figure \ref{fig:bulk-comapre-keff} shows how the effective multiplication factor varies over time for these methods. It can be seen that there is a jump at around 50 days for the bulk SaltProc data, which is caused by removal of the rare earths, as shown in the MSBR reprocessing scheme \cite{robertson_conceptual_1971}. However, it is clear to see here that the continuous methods are not able to match the bulk batchwise reprocessing results very closely at all, even using the SaltProc Direct Linear method which attempts to replicate the same reprocessing constants.
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{images/soln-3-keff.png}
+  \caption{k$_{eff}$ over time comparing bulk batchwise results to continuous methods.}
+   \label{fig:bulk-comapre-keff}
+\end{figure}
 
+Figures \ref{fig:bulk-comapre-th232} and \ref{fig:bulk-comapre-u233} show the mass of thorium-232 and uranium-233 over time, respectively. Overall, the masses of both isotopes are within a few kilograms, and do not have a large impact on the differences between the methods. For example, the spike in thorium-232 mass at 50 days when the rare earths are removed does not have nearly as much impact as the removal of the rare earths does on reactor behaviour.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{images/soln-3-th232.png}
+  \caption{Thorium-232 mass over time comparing bulk batchwise results to continuous methods.}
+   \label{fig:bulk-comapre-th232}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{images/soln-3-u233.png}
+  \caption{Uranium-233 mass over time comparing bulk batchwise results to continuous methods.}
+   \label{fig:bulk-comapre-u233}
+\end{figure}
+
+Figures \ref{fig:bulk-comapre-xe135} and \ref{fig:bulk-comapre-xe136} show how the xenon-135 and xenon-136 masses, respectively, change over time for the different methods. From these figures, it can be seen that the SPDL continuous method does a fairly good job of matching the bulk batchwise reprocessing method's masses. However, the SPDL method allows for slightly more fission product poisons to exist, such as xenon-135, which allows for more parasitic absorption, into isotopes such as xenon-136. This is the reason that the SPDL effective multiplication factor is lower than that of bulk SaltProc.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{images/soln-3-xe135.png}
+  \caption{Xenon-135 mass over time comparing bulk batchwise results to continuous methods.}
+   \label{fig:bulk-comapre-xe135}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{images/soln-3-xe136.png}
+  \caption{Xenon-136 mass over time comparing bulk batchwise results to continuous methods.}
+   \label{fig:bulk-comapre-xe136}
+\end{figure}
+
+From these results, it can be concluded that using continuous reprocessing to perform a bulk reprocessing scheme will not yield same results. This also means that attempting to simulate a continuous reprocessing scheme using a bulk batchwise method will not yield results that are the same as a continuous reprocessing method.
+
+\subsubsection{Continuous and Steady Batchwise Methods}
+
+The next set of comparisons are between the steady batchwise results from SaltProc and two continuous methods, Direct Linear and SaltProc Direct Linear. The effective multiplication factor over time for each of the three methods can be seen in Figure \ref{fig:steady-compare-keff}. It can be seen that the Direct Linear continuous $k_{eff}$ is closer to the steady batchwise $k_{eff}$ than the SaltProc Direct Linear result. Among figures \ref{fig:steady-compare-th232} through \ref{fig:steady-compare-xe136}, the plot which demonstrates the reason behind this is the uranium-233 mass over time.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{images/soln-1-keff.png}
+  \caption{k$_{eff}$ over time comparing steady batchwise results to continuous methods.}
+   \label{fig:steady-compare-keff}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{images/soln-1-th232.png}
+  \caption{Thorium-232 mass over time comparing steady batchwise results to continuous methods.}
+   \label{fig:steady-compare-th232}
+\end{figure}
+
+The uranium-233 mass over time for the different methods reflects very closely with the effective multiplication factors. The uranium-233 comes from beta decay of protactinium-233, where protactinium is one of the elements designated to be removed in the MSBR reprocessing scheme. For Direct Linear, the removal of protactinium is approximated using 100\% removal over three days. For SaltProc Direct Linear, the removal is instead approximated to 9.5\% over 3 days, which is the value used in steady SaltProc. However, because the SPDL method is continuously removing the protactinium, this means that there is less protactinium-233 which decays into uranium-233 when compared to the steady batchwise method in SaltProc. 
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{images/soln-1-u233.png}
+  \caption{Uranium-233 mass over time comparing steady batchwise results to continuous methods.}
+   \label{fig:steady-compare-u233}
+\end{figure}
+
+A similar effect with the protactinium can be seen in Figures \ref{fig:steady-compare-xe135} and \ref{fig:steady-compare-xe136}. Although the SPDL method is using a reprocessing constant which should allow for matching SaltProc, the continuous removal results in fairly large discrepancies. The xenon-135 difference is only on the order of tenths of a gram, but because the quantity is constantly suppressed in the continuous SPDL method, the overall capture is reduced drastically, resulting in a difference of roughly 40 grams in the xenon-136 mass.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{images/soln-1-xe135.png}
+  \caption{Xenon-135 mass over time comparing steady batchwise results to continuous methods.}
+   \label{fig:steady-compare-xe135}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{images/soln-1-xe136.png}
+  \caption{Xenon-136 mass over time comparing steady batchwise results to continuous methods.}
+   \label{fig:steady-compare-xe136}
+\end{figure}
+
+Overall, using a continuous method to approximate a steady batchwise method does not seem generally viable. This is because isotopes which are continuously removed have a very different behaviour from isotopes which are removed after interactions occur over an entire depletion step. If the reprocessing scheme calls for a batchwise process, it may be important to reactor behaviour to allow for those capture or decay processes to occur without influence from reprocessing.
 
 \subsection{Overall Differences}
 
-Figures \ref{fig:prev-cur-keff-plot} through  \ref{fig:prev-cur-xe136-plot} show how the previous work, using steady batchwise method with the average uranium-233 feed, and the current work, using the direct linear continuous method with the realistic protactinium decay, compare with each other. 
+Figures \ref{fig:prev-cur-keff-plot} through  \ref{fig:prev-cur-xe136-plot} show how the previous work, using a steady batchwise reprocessing method with the average uranium-233 feed, and the current work, using the direct linear continuous method with the realistic protactinium decay, compare with each other. The previous work uses the long term bulk average uranium-233 feed rate, and implements altered cycle rates for protactinium, xenon, and krypton. The continuous method uses only the cycle time data from the Robertson report to generate the reprocessing constants \cite{robertson_conceptual_1971}.
 
 The effective multiplication factor for the two different approaches initially has the previous work falling faster. This is due to the initial buildup of fission product poisons, while the continuous reprocessing allows for these poisons to be removed more efficiently. However, as time goes on, the lacking uranium-233 feed due to the empty protactinium decay tank causes the current work to dip below the previous work. Over the course of three months, the longer lived behaviour cannot be seen. However, the section covering the advanced protactinium decay model in more depth shows the results over the course of several years and reveals that the reactivity difference due to the different refueling methods eventually decreases.
 
@@ -510,26 +586,43 @@ The effects of mass balancing are of particular note in the Serpent2 code becaus
 
 However, if the issue of mass balancing is not considered, then the results could be fairly inaccurate, potentially without anyone noticing. This is because changes in isotopic composition and densities are expected. The issue comes about when these changes are caused by adding more material to a space than is physically possible, thus generating non-physical results.
 
-\subsection{Expected Impact}
+\subsection{Impact Minimization Using Modified Feeds}
+
+One aspect investigated is minimizing the change in the net mass by only altering the average feed rates implemented. It is determined through repeated simulations that increasing the thorium-2323 feed rate drives the second derivative of the net mass negative. The uranium-233 feed increasing drives the second derivative to be positive. The reason for these effects are due to the change in the effective multiplication factor, mass of the added feed, and removal of fission products by reprocessing.
+
+Using these relationships, a process to determine the feed rates to minimize the change in the net mass is determined. The process is as follows:  hold one feed rate constant while adjusting the other;
+if the final net mass is higher than initial net mass, then reduce the feed rates and vice versa;
+once the final net mass is same as initial net mass, make adjustment based on second derivative;
+if the second derivative is positive, increase thorium-232 or decrease uranium-233 feed;
+if the second derivative is negative, increase uranium-233 or decrease thorium-232 feed;
+iterate until second derivative is zero and net mass remains roughly constant.
+
+After iterating through this processes several times using a depletion time step of 300 days over 10 steps, the modified average feed rates of 1.9 kg/day of thorium-232 and 2.16 kg/day of uranium-233 were determined to result in a very small change to the net mass on the order of 0.02\%.
+
+\subsection{Actual Impact}
 
 Previously, the maximum impact of improper mass balancing was calculated and was shown to have a 21\% difference impact on the density of thorium-232. However, it is expected for the thorium-232 mass to change over time, so only viewing the mass of thorium is not very useful. Instead, viewing the net mass of the system will allow for insight into how the overall system behaviour could be expected to change due to density variations.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.1]{images/placeholder.png}
-  \caption{Net mass of the fuel salt.}
+  \includegraphics[scale=0.5]{images/net-mass-pcnt-change.png}
+  \caption{Change in net mass of the fuel salt for various methods.}
    \label{fig:net-mass-bal}
 \end{figure}
 
-Figure \ref{fig:net-mass-bal} shows the evolution of the net mass of the fuel salt over time while using the protactinium decay, a 30 day depletion time step, and the direct linear continuous reprocessing approach.
+Figure \ref{fig:net-mass-bal} shows the evolution of the net mass of the fuel salt over time while using a 30 day depletion time step over 360 days. The method which has the largest change in the net mass is the Direct Linear method with the averaged uranium-233 feed rate. The net mass difference is roughly 198 kilograms, which appears to be fairly substantial. However, the approximate impact upon the simulation accuracy is dependent on the density. Equation \eqref{eq:new_rho_2} shows how the final density is impacted by the added mass, where the initial fuel salt density, $\rho_0$, is 3.35 grams per cubic centimeter. 
 
+\begin{equation} \hfill
+\rho_f = \frac{m_0 + \Delta m}{V} = \rho_0 + \Delta \rho
+\hfill\label{eq:new_rho_2} \end{equation}
 
+Continuing with the Direct Linear case using the averaged uranium-233 feed, the change in the density is on the order of four milligrams per cubic centimeter, yielding a final density percent difference of 0.12\%. In terms of the impact on overall results, the change in density due to implementing the continuous method is fairly negligible unless the required simulation is of very high precision.
 
-\subsection{Magnified Impact}
+%\subsection{Magnified Impact}
 
-One target parameter which could be optimized is the change in the net mass of the core over depletion in order to minimize effects of mass imbalance.
+%One target parameter which could be optimized is the change in the net mass of the core over depletion in order to minimize effects of mass imbalance.
 
-2D TABLES FOR DIFFERENT U-233 AND TH-232 FEED RATES (th-232 masses, u-233 masses, etc.)
+%2D TABLES FOR DIFFERENT U-233 AND TH-232 FEED RATES (th-232 masses, u-233 masses, etc.)
 
 %\section{Isotopic Development}
 
