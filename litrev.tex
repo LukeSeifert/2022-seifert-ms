@@ -1,8 +1,6 @@
-
 \renewcommand*\descriptionlabel[1]{\hspace\leftmargin$#1$}
 \setcounter{tocdepth}{5}
 \setcounter{secnumdepth}{5}
-
 
 \section{Molten Salt Reactors}
 
@@ -59,7 +57,8 @@ f = 100\%, T = 60 d, \Delta t = 3 d \rightarrow \gamma = 5\%
 \subsubsection{Continuous Reprocessing}
 
 %For a continuous approach, removing some fraction is dependent upon the particular isotope since the approach involves adding a term to the Bateman equation. This is one of the methods used in Serpent2 continuous reprocessing, where separations are only performed based on the element, not each particular isotope, an extension developed by Aufiero et al \cite{aufiero_extended_2013}. Equation \ref{eq:Bateman_default} shows the generic form of the Bateman equation, while Equation \ref{eq:Bateman_type_one_decay} shows the terms added to Equation \ref{eq:Bateman_default}, which are the reprocessing constants, or $\lambda_{r}$ added. 
-The continuous reprocessing method involves directly modifying the Bateman equation, shown in Equation \eqref{eq:Bateman_default}. One of the continuous reprocessing methods used in Serpent2 continuous reprocessing, an extension developed by Aufiero et al, is henceforth refered to as "decay" continuous reprocessing \cite{aufiero_extended_2013}. Equation (\ref{eq:Bateman_type_one_decay}) shows the terms added to Equation (\ref{eq:Bateman_default}), which are the reprocessing constants, $\lambda_{r}$, which is of the same form of radioactive decay, hence the name "decay" continuous reprocessing. These terms represent removal of the current isotope as well as feed of the current isotope from other sources.
+The continuous reprocessing method involves directly modifying the Bateman equation, shown in Equation \eqref{eq:Bateman_default}. One of the continuous reprocessing methods used in Serpent2 continuous reprocessing, an extension developed by Aufiero et al, is henceforth refered to as "decay" continuous reprocessing \cite{aufiero_extended_2013}. Equation \eqref{eq:Bateman_default} shows the Bateman equation with production and loss exclusively from fission, absorption, and decay; and Equation \eqref{eq:Bateman_type_one_decay} shows the Bateman equation with the removal from reprocessing subtracted and addition from feed sources added.
+%Equation (\ref{eq:Bateman_type_one_decay}) shows the terms added to Equation (\ref{eq:Bateman_default}), which are the reprocessing constants, $\lambda_{r}$, which is of the same form of radioactive decay, hence the name "decay" continuous reprocessing. These terms represent removal of the current isotope as well as feed of the current isotope from other sources.
 
 \begin{equation} \hfill
 \begin{split}
@@ -73,7 +72,8 @@ The continuous reprocessing method involves directly modifying the Bateman equat
 %\frac{dN}{dt} = \sum_j \lambda_j N_j + \gamma \Sigma_f \phi + \Sigma_k \phi - \lambda N - \Sigma \phi - C
 %\frac{dN_j}{dt} = \sum_{i \neq j} \left [ \left( \gamma_{i \rightarrow j} \sigma_{f, i} \Phi + \lambda _{i \rightarrow j} + \lambda _{reproc, i \rightarrow j} + \sigma_{i \rightarrow j} \Phi \right) N_i \right ] - \left ( \lambda_j + \lambda_{reproc, j} + \sigma_j \Phi \right ) N_j
 %\frac{dN_j}{dt} = \sum_{i \neq j} \left [ \left( \gamma_{i \rightarrow j} \sigma_{f, i} \Phi + \lambda _{i \rightarrow j} + \lambda _{r, i \rightarrow j} + \sigma_{i \rightarrow j} \Phi \right) N_i \right ] - \left ( \lambda_j + \lambda_{r, j} + \sigma_j \Phi \right ) N_j + \sum_{mat} \lambda _{r, i \rightarrow j} N_i
-\frac{dN_j}{dt}_{net} = \frac{dN_j}{dt}_{base} -  \lambda_{r, j} N_j + \sum_{mat} \lambda _{r, i \rightarrow j} N_i
+%\frac{dN_j}{dt}_{net} = \frac{dN_j}{dt}_{base} -  \lambda_{r, j} N_j + \sum_{mat} \lambda _{r, i \rightarrow j} N_i
+\frac{dN_j}{dt}_{net} = \frac{dN_j}{dt}_{base} -  \lambda_{r, j} N_j + \sum_{feed} \lambda _{f, j} N_j
 \hfill\label{eq:Bateman_type_one_decay} \end{equation}
 
 The symbols given in the equations are defined as follows \cite{leppanen_development_2007}:
@@ -89,11 +89,19 @@ The symbols given in the equations are defined as follows \cite{leppanen_develop
 \item[\lambda_j] is the decay constant of isotope $j$.
 \item[\lambda_{r, j}] is the reprocessing constant for removal of isotope $j$.
 \item[\sigma_j] is the microscopic total transmutation cross section of isotope $j$.
-\item[\lambda _{r, i \rightarrow j}] is the reprocessing constant for feed of material $i \rightarrow j$.
+\item[\lambda _{f, j}] is the feed constant for feed of isotope $i$.
 \end{description}
 
 %It can be seen visually that the reprocessing removal essentially operates as increasing the decay rate when applied in this manner. For example, increasing the decay rate of a particular element in a given material in Serpent2 also requires another material to gain a feed rate equivalent to that decay rate. The feed rate of a particular material is given by summing the removal rates of other materials for each isotope.
-Equation \eqref{eq:Bateman_type_one_decay} shows that the reprocessing removal has the same mathematical operation as the decay rate. Unlike decay, the isotopes removed by reprocessing instead are transfered to a different material, which operates as a feed for that material. This can be seen in the summation term, which sums over the different materials and moves them from material $i$ to material $j$.
+Equation \eqref{eq:Bateman_type_one_decay} shows that the reprocessing removal has the same mathematical operation as the decay rate. Unlike decay, the isotopes removed by reprocessing instead are transfered to a different material, which operates as a feed for that material. This can be seen in the summation term, which sums over the different feeds. Figure \ref{fig:msr-outline-fig-show} shows how these reprocessing and feed constants fit into the reactor operation. Additionally, the figure shows that these terms relate to reprocessing and feed mass flow rates of $\dot{m}_{r, j}$ and $\dot{m}_{f, j}$, respectively.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{images/msr-feed-repr-fig.png}
+  \caption{Simplified model of how Bateman equation relates to mass flow rates.}
+   \label{fig:msr-outline-fig-show}
+\end{figure}
+
 
 Serpent2 has three different settings for continuous reprocessing which alter the effect on the Bateman equations. The zeroth setting does not conserve mass and will not be discussed in this work. 
 
