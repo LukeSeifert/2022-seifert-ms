@@ -102,9 +102,20 @@
 %% Note that ProQuest truncates their abstracts at 350 words.
 \begin{abstract}
 
-Molten salt reactors have had many depletion models generated since being announced as a generation IV reactor. Among these models, one important aspect which is considered is the online reprocessing capabilities of a liquid fueled molten salt reactor. This includes adding fresh fuel and removing fission products from the reactor during operation, allowing for a more efficient neutron economy.
-In order to simulate reprocessing, there are two different mathematical approaches which are implemented, called batchwise and continuous reprocessing. For online reprocessing, the continuous reprocessing method is more physically reflective of the operation in reality. However, there are many works which have implemented batchwise reprocessing to simulate a continuous reprocessing process.
-This work shows that continuous reprocessing and batchwise reprocessing methods are not interchangeable, and there is a fairly large difference in the results when using the two different approaches for the same system. This work also shows the computational cost and a depletion step mesh refinement for both continuous and batchwise reprocessing. From those results, it is determined that continuous reprocessing allows for significantly larger steps without large increases in error, which enables drastically reduced computational cost on the order of one magnitude. The effect of density increase when using the Serpent2 code due to continuous reprocessing is also investigated, and it is determined that for typical operations, the density change is roughly 0.12\%.
+Molten salt reactors have had many depletion models generated since being announced as a generation IV reactor.
+To maintain stability and limit chemical corrosion, often molten salt reactors utilize online reprocessing.
+Modeling reprocessing in concert with depletion is complex due to variability in time scales.
+%Among these models, one important aspect which is considered is the online reprocessing capabilities of a liquid fueled molten salt reactor.
+The online reprocessing includes adding fresh fuel and removing fission products from the reactor during operation, allowing for a more efficient neutron economy.
+In order to simulate reprocessing in depletion simulations, there are two different mathematical approaches which are implemented, called batchwise and continuous reprocessing.
+For online reprocessing, the continuous reprocessing method is more physically reflective of the operation in reality.
+However, there are many works which have implemented batchwise reprocessing to simulate a continuous reprocessing process.
+In this thesis, I show that continuous reprocessing and batchwise reprocessing methods are not interchangeable, and there is a fairly large difference in the results when using the two different approaches for the same system.
+This work also investigates the computational cost of different reprocessing methods and a depletion step mesh refinement for both continuous and batchwise reprocessing.
+From those results, it is determined that continuous reprocessing allows for significantly larger steps without large increases in error, which enables drastically reduced computational cost on the order of one magnitude.
+Part of the comparison also looks at benefits to using batchwise reprocessing, which is able to maintain the net core mass so that the problem remains physical.
+Because continuous reprocessing does not necessarily keep the overall mass constant by balancing fresh fuel feeds with fission product removal, this is investigated.
+An increase to core mass without changing the core volume would result in an increased density, generating non-physical results.
 
 
 \end{abstract}
@@ -112,6 +123,10 @@ This work shows that continuous reprocessing and batchwise reprocessing methods 
 \chapter*{Acknowledgments}
 
 This material is based upon work supported under an Integrated University Program Graduate Fellowship.
+Any opinions, findings, conclusions or recommendations expressed in this publication are
+those of the author(s) and do not necessarily reflect the views of the Department of Energy
+Office of Nuclear Energy.
+
 
 %% The thesis format requires the Table of Contents to come
 %% before any other major sections, all of these sections after
