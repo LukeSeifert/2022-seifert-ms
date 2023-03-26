@@ -81,7 +81,7 @@
 \tikzstyle{arrow} = [thick,->,>=stealth]
 
 
-\title{Analysis of Reprocessing Methods in the Molten Salt Breeder Reactor}
+\title{Analysis of and Comparison Between Reprocessing Methods in the Molten Salt Breeder Reactor}
 \author{Luke Seifert}
 \department{Nuclear, Plasma, Radiological Engineering}
 %\schools{B.S., University of Illinois - Urbana Champaign, 2017}
@@ -102,20 +102,29 @@
 %% Note that ProQuest truncates their abstracts at 350 words.
 \begin{abstract}
 
-Molten salt reactors have had many depletion models generated since being announced as a generation IV reactor.
-To maintain stability and limit chemical corrosion, often molten salt reactors utilize online reprocessing.
-Modeling reprocessing in concert with depletion is complex due to variability in time scales.
+Molten salt reactor modeling can be challenging in liquid fueled cores as the composition varies temporally and spatially.
+Although these models are challenging, they are important for predicting reactor safety and performance during operation.
+%Molten salt reactors have had many depletion models generated since being announced as a generation IV reactor.
+%To maintain stability and limit chemical corrosion, often molten salt reactors utilize online reprocessing.
+One of the reasons these models are challenging is the difficulty in capturing different physical phenomena which occur in different time scales.
+%Modeling reprocessing in concert with depletion in liquid fueled molten salt reactors is complex due to different physical phenomena which occur in different time scales.
+Over short time scales, one of the physical phenomena is the movement of delayed neutron precursors to less important regions of the reactor.
+For longer time scales, one of the physical phenomena is online reprocessing, which includes adding fresh fuel and removing fission products from the reactor during operation and is the focus of this work.
+Reprocessing is useful in liquid fueled molten salt reactors because it limits chemical corrosion and improves the neutron economy.
+The reprocessing can be performed continuously during operation, refered to as online reprocessing, or the reprocessing can be performed in batches during outages, refered to as batchwise reprocessing.
 %Among these models, one important aspect which is considered is the online reprocessing capabilities of a liquid fueled molten salt reactor.
-The online reprocessing includes adding fresh fuel and removing fission products from the reactor during operation, allowing for a more efficient neutron economy.
-In order to simulate reprocessing in depletion simulations, there are two different mathematical approaches which are implemented, called batchwise and continuous reprocessing.
-For online reprocessing, the continuous reprocessing method is more physically reflective of the operation in reality.
+%The online reprocessing includes adding fresh fuel and removing fission products from the reactor during operation, allowing for a more efficient neutron economy.
+In order to simulate reprocessing computationally, there are two different mathematical approaches which are commonly implemented in the literature, called batchwise and continuous reprocessing.
+The continuous reprocessing method is more physically reflective of the operation in reality for any reactor which uses a continuous chemical reprocessing scheme.
 However, there are many works which have implemented batchwise reprocessing to simulate a continuous reprocessing process.
-In this thesis, I show that continuous reprocessing and batchwise reprocessing methods are not interchangeable, and there is a fairly large difference in the results when using the two different approaches for the same system.
-This work also investigates the computational cost of different reprocessing methods and a depletion step mesh refinement for both continuous and batchwise reprocessing.
-From those results, it is determined that continuous reprocessing allows for significantly larger steps without large increases in error, which enables drastically reduced computational cost on the order of one magnitude.
-Part of the comparison also looks at benefits to using batchwise reprocessing, which is able to maintain the net core mass so that the problem remains physical.
-Because continuous reprocessing does not necessarily keep the overall mass constant by balancing fresh fuel feeds with fission product removal, this is investigated.
-An increase to core mass without changing the core volume would result in an increased density, generating non-physical results.
+In this thesis, I show that continuous reprocessing and batchwise reprocessing methods are not interchangeable, and there is a fairly large difference in the results when using each approach for the same system.
+I also investigate the computational cost of different reprocessing methods by performing a depletion step mesh refinement study.
+In this study, I found that continuous reprocessing allows for significantly larger steps without large increases in error, which enables drastically reduced computational cost.
+However, continuous reprocessing does not necessarily keep the overall mass constant, thus potentially leading to an unphysical solution.
+I compare the differences between both methods while determining the effect of this unphysical mass change caused by continuous reprocessing.
+%Part of the comparison also looks at benefits to using batchwise reprocessing, which is able to maintain the net core mass so that the problem remains physical.
+%Because continuous reprocessing does not necessarily keep the overall mass constant by balancing fresh fuel feeds with fission product removal, this is investigated.
+%An increase to core mass without changing the core volume would result in an increased density, generating non-physical results.
 
 
 \end{abstract}
