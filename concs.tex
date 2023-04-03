@@ -4,23 +4,66 @@
 
 \section{Comparison of Continuous and Batchwise Reprocessing Methods}
 
-In this work, the differences and similarities between continuous and batchwise reprocessing have been discussed. Overall, it was shown that in terms of step size, computational cost, and steady state relative error, the continuous reprocessing method yields better results when handling continuous online reprocessing of an MSR.
+In this work, the differences and similarities between modeling MSRs using continuous and batchwise reprocessing have been discussed. Overall, it was shown that in terms of step size, computational cost, and steady state relative error, the continuous reprocessing method yields better results when handling continuous online reprocessing of an MSR.
 
-For step sizes, it was shown mathematically how implementing larger depletion step sizes with a batchwise reprocessing method causes the relative steady state error to become larger. It was also shown that this error corresponds to the cycle time of the elemental target, meaning that the maximum depletion time step which will yield valid results is dependent upon the reprocessing scheme of the given reactor. For continuous reprocessing, the depletion time step is instead limited by updating the simulation data and does not depend on the reprocessing scheme, allowing for greater flexibility.
+For step sizes, it was shown mathematically how implementing larger depletion step sizes with a batchwise reprocessing method causes the relative steady state error to become larger.
+It was also shown that this error corresponds to the cycle time of the elemental target, meaning that the maximum depletion time step which will yield valid results is dependent upon the reprocessing scheme of the given reactor.
+For continuous reprocessing, the depletion time step is instead limited by updating the simulation data and does not depend on the reprocessing scheme, allowing for greater flexibility.
+Variable step sizes were also considered for continuous reprocessing.
+For the time frame of one year in the MSBR, using depletion time steps larger than 30 days led to increased error.
+Changing the ordering of the steps did not have significant impact, but changing the largest depletion step size did directly impact the accuracy of the results.
+
+For computational cost, generic equations were generated which showed the approximate costs of continuous and batchwise methods. The main differences in the costs came from the smaller depletion step size required of batchwise reprocessing to generate accurate results and from the doubling up of runs at the same time step.
+Although the doubling up of runs could be removed, the continuous reprocessing method still retains a lower computational cost due to the larger depletion step sizes it allows.
+
+For the steady state relative error, an equation was generated under steady state assumptions.
+This allows for understanding how the difference in nuclide concentrations when using the different reprocessing methods comes about.
+Specifically, it perfectly isolates the differences, allowing for understanding the level of error without accounting for more complex, but realistic scenarios.
+
+The realistic scenarios for this work were demonstrated using the MSBR.
+This allowed for non-steady state analysis, where the difference in reprocessing methods have many impacts.
+For a given nuclide, its rate of generation from fission products may be impacted by the refueling reprocessing, the reprocessing removal of its parent, and the change in the fission rate due to parasitic absorption which depends on the reprocessing rates.
+These complexities are shown within the results, which demonstrate how the batchwise and continuous reprocessing methods differ.
 
 \section{Continuous Reprocessing Investigations}
 
-Because the continuous reprocessing method provides many benifits when compared to the batchwise reprocessing method, investigating weaknesses in the method is important. One of these weaknesses which was investigated in this work was the mass balancing of the fuel salt in the simulation.
+Because the continuous reprocessing method provides many benefits when compared to the batchwise reprocessing method, investigating weaknesses in the method is important.
+One of these weaknesses which was investigated in this work was the mass balancing of the fuel salt in the simulation.
+The analysis of the net mass showed that most of the methods caused an increase in mass of the MSBR after one year.
+Using an iterative process, the smallest net mass change after one year using the MSBR reprocessing scheme was found by adjusting the feed rates.
+This smallest net mass change was 0.02\%, while the largest net mass change was 0.12\%.
+This means that over the course of one year, the net mass in the MSBR has an insignificant impact on the results.
 
-DATA
+This work also discussed how continuous methods compared to each other and how continuous methods could approximate a batchwise method.
+Overall, it was shown that, although there are several different methods to Decay reprocessing, they all yield similar results.
 
-This work also discussed how continuous methods compared to each other and how continuous methods could approximate a batchwise method. DATA 
+Finally, the inclusion of a decay tank to more model the MSBR with more physical accuracy was shown.
+This method behaved differently from the method used by Rykhlevskii, with noticeable differences even after ten years of operation \cite{rykhlevskii_advanced_2018}.
+This method was then combined with the continuous reprocessing to compare with a batchwise reprocessing method that used an average feed rate instead.
+This led to combined differences due to the reprocessing methods and due to the refueling, which caused large differences after only 90 days of operation.
+This shows how the combination of assumptions can lead to differing results quickly for an MSR model.
+
 
 \section{Future Work}
 
-There are a few areas in which this work should be continued. The first area of interest would be analysis of more specific works which have implemented batchwise reprocessing to simulate a continuous reprocessing scheme. This analysis could include replicating the results using continuous reprocessing, determining what level of error to expect for different isotopes, or analysis of depletion step size implemented in comparison to the reprocessing scheme cycle times provided. Alternatively, works which have implemented continuous reprocessing could have the net mass and feed rates analyzed to determine if the simulation may have had any unexpected results due to density variations which would not have physically occured.
+There are areas that merit further investigation that will supplement this work.
+The first area of interest would be replication of works which have implemented batchwise reprocessing to simulate a continuous reprocessing scheme, such as those shown in Section \ref{litrev-msr-batchwise}.
+This would primarily consist of replicating the results using continuous reprocessing.
+Additional work would be calculating the error for different isotopes, specifically isotopes which are expected to have a large impact on reactor behavior, affected by the reprocessing scheme.
+This would lead nicely into an analysis of the difference in the reactor physics after depletion caused by those key isotopes.
 
-Another area of interest is longer net depletion time analysis. This is more difficult to perform for the batchwise reprocessing methods, as the depletion time steps must be kept shorter and the SaltProc tool currently requires double running each time step. However, it would be useful to generate very long net depletion time results to compare with the steady state error mathematical model predictions. Additionally, the difference between various neutronics parameters could also be compared.
+Another useful analysis is looking into those same works, which have implemented batchwise reprocessing to simulate a continuous reprocessing scheme, and perform a depletion time step refinement study.
+This would be useful to demonstrate the difference in reactor physics if the batchwise reprocessing scheme implemented used depletion time steps twice as long or twice as short.
+Either would alter the concentrations of elements with short cycle times significantly.
+The concentrations could potentially vary by a factor of two, which would then lead to differences in the reactor physics.
+This would have an impact on the final results, and could be compared directly with the previous results of the work.
 
-One final area which could be further explored is the error analysis, which in this work only covered steady state relative error of an isotopes concentration in a generic sense. Work could be done to determine the error at each time step to better analyze systems which have not achieved steady state. The error analysis could also include variable depletion time steps instead of requiring a set depletion time step to be valid. 
+Another area of study is to replicate works which implement continuous reprocessing, such as those shown in Section \ref{litrev-msr-continuous}.
+Particularly, investigating the development of the net mass would be of interest, as it could indicate non-physical results.
+Specifically, of interest is the magnitude of the change in the net mass and how it affects the densities, and thus the macroscopic cross sections.
+A change of a few percent in the macroscopic cross section due to a non-physical change in the mass would mean that the results presented in the work would have an accounted source of error affecting the results.
+If the net mass change is large enough, determining feed rates which balance the mass or implementing batchwise reprocessing to balance the mass would be implemented.
+This would allow for a comparison against the same results presented in the work with balanced mass to determine how the changes in the reactor physics altered the overall results in the work.
+
+
 

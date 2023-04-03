@@ -68,17 +68,17 @@ Implementing batchwise reprocessing increases computational cost when performed 
 %\begin{equation} \hfill
 %\gamma = X \frac{\Delta t}{T}
 %\hfill\label{eq:batchwise_rem_eff} \end{equation}
-Batchwise reprocessing starts with some removal rate where some fraction, $f$, of a given element is removed from the fuel salt in the system over some time period, $T_{cyc}$, referred to as the cycle time. Over a given depletion simulation time step, $\Delta t$, a different fraction, $\gamma$, of the element's mass is removed, where $\gamma$ corresponds to $f$ according to Equation (\ref{eq:batchwise_rem_eff}). The scaling term on $f$ for the removal efficiency is a linear approximation based on the time step adjustment in Equation (\ref{eq:batchwise_rem_eff}). If the time step used causes the fraction removed, $\gamma$, to be greater than 1, the amount removed remains at 100\% so as to not have negative mass. This method is called steady batchwise reprocessing since it uses a steady removal amount during each depletion step.
+Batchwise reprocessing starts with some removal rate where some fraction, $f$, of a given element is removed from the fuel salt in the system over some time period, $T_{cyc}$, referred to as the cycle time. Over a given depletion simulation time step, $\Delta t$, a different fraction, $\gamma$, of the element's mass is removed, where $\gamma$ corresponds to $f$ according to Equation (\ref{eq:batchwise_rem_eff}). The scaling term on $f$ for the removal efficiency is a linear approximation based on the time step adjustment in Equation (\ref{eq:batchwise_rem_eff}). If the time step used causes the fraction removed, $\gamma$, to be greater than 1, the amount removed remains at 100\% so as to not have negative mass. This method is called Steady batchwise reprocessing since it uses a steady removal amount during each depletion step.
 
-An alternative approach is to establish a depletion time step, $\Delta t$, such that the cycle time, $T_{cyc}$, is a multiple of $\Delta t$. Then, the fractional batchwise removal, $f$, occurs at the steps when $\Delta t$ is a multiple of $T_{cyc}$, removing the need for scaling. This method is called bulk batchwise reprocessing because it performs reprocessing all at once in a bulk manner.
+An alternative approach is to establish a depletion time step, $\Delta t$, such that the cycle time, $T_{cyc}$, is a multiple of $\Delta t$. Then, the fractional batchwise removal, $f$, occurs at the steps when $\Delta t$ is a multiple of $T_{cyc}$, removing the need for scaling. This method is called Bulk batchwise reprocessing because it performs reprocessing all at once in a bulk manner.
 
 \begin{equation} \hfill
 \gamma = f \frac{\Delta t}{T_{cyc}}
 \hfill\label{eq:batchwise_rem_eff} \end{equation}
 
-One example of implementing batchwise reprocessing can be seen in the depletion simulation of the Molten Salt Breeder Reactor using SaltProc \cite{rykhlevskii_modeling_2019}. This simulation uses batchwise reprocessing every 3 days with a linear approximation of the cycle times given by Robertson et al in the ORNL report \cite{robertson_conceptual_1971, rykhlevskii_modeling_2019}. The xenon and krypton removals in this work use a gas separation system equation, while the protactinium uses a modeled liquid-liquid reductive extraction process. These efficiencies differ from the cycle time values, causing slight differences in those terms. The MSBR also has two varying feed inputs of \ce{^{232}Th} and \ce{^{233}U}.
+One example of implementing batchwise reprocessing can be seen in the depletion simulation of the Molten Salt Breeder Reactor using SaltProc \cite{rykhlevskii_modeling_2019}. This simulation uses batchwise reprocessing every three days with a linear approximation of the cycle times given by Robertson et al in the ORNL report \cite{robertson_conceptual_1971, rykhlevskii_modeling_2019}. The xenon and krypton removals in this work use a gas separation system equation, while the protactinium uses a modeled liquid-liquid reductive extraction process. These efficiencies differ from the cycle time values, causing slight differences in those terms. The MSBR also has two varying feed inputs of \ce{^{232}Th} and \ce{^{233}U}.
 
-Examples of the steady batchwise method used in SaltProc can be seen in Equations \eqref{eq:SP_20s} and \eqref{eq:SP_60d}. Both examples show what the resulting mass removal per step, or $\gamma$, term should be for different cycle time values. The first shows a cycle time of 20s, which is shorter than the step time of 3 days. This results in a removal rate over 100\%, which is set to 100\%. The second shows a cycle time of 60 days, longer than the step size. This results in a 5\% removal per step. An alternative approach to the second example, which is implemented in the earlier versions of SaltProc, is to perform no removal until 60 days have elapsed and then remove 100\% of material.
+Examples of the Steady batchwise method used in SaltProc can be seen in Equations \eqref{eq:SP_20s} and \eqref{eq:SP_60d}. Both examples show what the resulting mass removal per step, or $\gamma$, term should be for different cycle time values. The first shows a cycle time of 20s, which is shorter than the step time of three days. This results in a removal rate over 100\%, which is set to 100\%. The second shows a cycle time of 60 days, longer than the step size. This results in a 5\% removal per step. An alternative approach to the second example, which is implemented in the earlier versions of SaltProc, is to perform no removal until 60 days have elapsed and then remove 100\% of material.
 
 
 \begin{equation} \hfill
@@ -388,7 +388,7 @@ Table \ref{tab:msbr_gen_data} has general information on the MSBR, while Table \
 \end{table}
 
 Table \ref{tab:msbr_salt_data} shows that the salt inventory in the core is approximately 19 m$^3$, with 8.2 m$^3$ from zone I and 10.8 m$^3$ from zone II.
-However, the MSBR model provided in SaltProc uses the volume of the primary system for its calculation \cite{rykhlevskii_modeling_2019}. This is an approximation which allows the depletion simulation to use the correct amount of net material, though it also means that material which would not be irradiated in the piping is present in the core. The core geometry uses the correct dimensions, which allows cross sections to remain as if the correct core volume were implemented.
+%However, the MSBR model provided in SaltProc uses the volume of the primary system for its calculation \cite{rykhlevskii_modeling_2019}. This is an approximation which allows the depletion simulation to use the correct amount of net material, though it also means that material which would not be irradiated in the piping is present in the core. The core geometry uses the correct dimensions, which allows cross sections to remain as if the correct core volume were implemented.
 %Overall, the depletion results are closer to the expected result if the fuel salt were fully utilized.
 
 
@@ -487,7 +487,7 @@ Rare earth fission product removal is performed using the metal-transfer process
    \label{fig:msbr_re_pa}
 \end{figure}
 
-To strip gaseous fission products, a bubble generator introduces helium sparging gas in 15 to 20 mil bubbles. 10 percent of the flow is redirected to the bypass loop which contains a gas separator. This gas separator strips the fission products with approximately 100 percent efficiency. The off-gas system also includes an approximately 2 hour holdup during which noble metals deposit on the fuel salt drain tank surface. Figure \ref{fig:msbr_nm_pa} shows this process, beginning with the number per time, or flux, of the noble gasses in the salt migrating to the graphite voids and helium sparging bubbles. This is followed by the volume holdup into more processing to handle the noble metal fission product cleanup.
+To strip gaseous fission products, a bubble generator introduces helium sparging gas in 15 to 20 mil bubbles. 10 percent of the flow is redirected to the bypass loop which contains a gas separator. This gas separator strips the fission products with approximately 100 percent efficiency. The off-gas system also includes an approximately two hour holdup during which noble metals deposit on the fuel salt drain tank surface. Figure \ref{fig:msbr_nm_pa} shows this process, beginning with the number per time, or flux, of the noble gasses in the salt migrating to the graphite voids and helium sparging bubbles. This is followed by the volume holdup into more processing to handle the noble metal fission product cleanup.
 
 \begin{figure}[H]
   \centering
@@ -502,6 +502,7 @@ To strip gaseous fission products, a bubble generator introduces helium sparging
 
 
 \section{MSR Modeling Approaches}
+\label{s:models-methods}
 
 For modeling of MSRs, it is important to model discrete and temporal behavior in core physics.
 %The first takes a given fuel composition and analyzes the performance of the reactor given that fuel composition. This may include
@@ -523,7 +524,7 @@ This is important because, as previously explained, the batchwise reprocessing m
 Therefore, because it is still common for works to use this method, it is important that the differences between continuous and batchwise methods are better understood.
 
 
-For all of the continuous reprocessing models given in Table \ref{tab:codes_types}, all of them use the "fictitious decay constant" approach, which is shown in Equation \eqref{eq:Bateman_type_one_decay}. For the batchwise models, most use the steady batchwise approach shown in Equation \eqref{eq:batchwise_rem_eff} and remove a fraction at each depletion step rather than bulk removal at certain steps.
+For all of the continuous reprocessing models given in Table \ref{tab:codes_types}, all of them use the "fictitious decay constant" approach, which is shown in Equation \eqref{eq:Bateman_type_one_decay}. For the batchwise models, most use the Steady batchwise approach shown in Equation \eqref{eq:batchwise_rem_eff} and remove a fraction at each depletion step rather than bulk removal at certain steps.
 
 %The "Reprocessing" column of Table \ref{tab:codes_types} shows the mathematical approach taken to the online reprocessing of the work, and does not necessarily represent the reactor reprocessing approach. However, since online reprocessing is considered in the table, offline batchwise reprocessing is not included, such as in the work by Zou et al \cite{zou_transition_2020}. The works shown in the table all use continuous reprocessing schemes, but some approximate the continuous physical process using batchwise methods.
 
@@ -600,7 +601,7 @@ The batchwise reprocessing in SaltProc includes both the removal and feed proces
 
 Betzler et al \cite{betzler_molten_2017} uses ChemTriton, a tool designed for SCALE to perform online reprocessing of MSRs. It contains work on multiple reactors, such as the MSBR and the MSRE. The tool iteratively runs SCALE/TRITON over small time steps to simulate continuous reprocessing, and includes enhanced time-dependent feed and separations.
 Betzler et al use this tool to optimize the thorium concentration to maintain a critical configuration while maintaining breeding capability, show the impact of fission product removal on core lifetime and fuel utilization, and more.
-For the MSBR case, Betzler et al uses 3 day time, similar to Rykhlevskii and Park et al.
+For the MSBR case, Betzler et al uses three day time, similar to Rykhlevskii and Park et al.
 This time step is selected because previous parametric studies showed that it is sufficiently short enough to model the online removal of protactinium \cite{powers_new_2013}.
 %The reason for not using shorter time steps is that using shorter time steps increases computational cost while also providing very little improvements to calculated eigenvalue and fuel cycle metrics, discussed by Betzler et al as well as by Powers et al \cite{powers_new_2013}.
 
@@ -620,7 +621,7 @@ Nuttin et al \cite{nuttin_potential_2005} analyzes the MSBR using a slightly sim
 
 A mixture of batchwise and continuous methods can be implemented if the reprocessing scheme includes physically batchwise processes or if mass balancing is an issue for the model.
 
-Fiorina et al \cite{fiorina_preliminary_2012} is on the Molten Salt Fast Reactor (MSFR) and uses a modified version of the ERANOS-based EQL3D procedure. Fiorina et al make use of continuous reprocessing for non-soluble fission products, but uses batchwise reprocessing for soluble fission products. The batchwise reprocessing was incorporated for simplicity of implementation in the model. The time steps used are shorter at the beginning of cycle and extend out to roughly 30 year steps for a 200 year depletion. Additionally, the authors also performed a radiotoxicity analysis which extends out to 1 million years.
+Fiorina et al \cite{fiorina_preliminary_2012} is on the Molten Salt Fast Reactor (MSFR) and uses a modified version of the ERANOS-based EQL3D procedure. Fiorina et al make use of continuous reprocessing for non-soluble fission products, but uses batchwise reprocessing for soluble fission products. The batchwise reprocessing was incorporated for simplicity of implementation in the model. The time steps used are shorter at the beginning of cycle and extend out to roughly 30 year steps for a 200 year depletion. Additionally, the authors also performed a radiotoxicity analysis which extends out to one million years.
 
 Nagy et al \cite{nagy_parametric_2008} uses a toy model to go through different reprocessing schemes based on the MSBR and MOSART reprocessing designs \cite{robertson_conceptual_1971, ignatiev_progress_2007}. SCALE-5 XSDRN\cite{noauthor_scale_2005} is used for neutron transport and ORIGEN-S is used for depletion. To account for DNPs, the authors assume that one-third of the delayed neutron precursors decay outside the core.
 Using a delayed neutron fraction of 0.0027 for $^{233}$U, the authors claim that 0.0009, or 90 pcm, should be subtracted from the eigenvalue to approximate the impact from the movement of delayed neutron precursors.
@@ -650,3 +651,33 @@ It is well understood that smaller step sizes are required for batchwise methods
 This is the gap that this work seeks to fill.
 I will show how the eigenvalue and various isotopic compositions vary while altering only the reprocessing methods implemented.
 
+
+%Because the net depletion time is similar to that of continuous reprocessing while implementing much smaller depletion step sizes, this results in a higher computational cost.
+% Gaps, best models, etc.
+
+\section{SaltProc}
+\label{s:theSaltProc}
+
+\subsection{MSBR Model}
+
+SaltProc comes with a full 3D model of the core of the MSBR created in Serpent2.
+The MSBR model provided in SaltProc uses the volume of the primary system, 48.7 cubic meters, for its calculations rather than the 19 cubic meters of the core \cite{rykhlevskii_modeling_2019}.
+This is an approximation which allows the depletion simulation to use the correct amount of net material, though it also means that material which would not be irradiated in the piping is present in the core.
+The core geometry uses the correct dimensions, which allows cross sections to remain as if the correct core volume were implemented.
+
+\subsection{Reprocessing}
+\label{s:SP-repr}
+
+SaltProc is used to handle batchwise reprocessing in this work because it uses Serpent2, which has built-in continuous reprocessing; comes with the MSBR geometry in Serpent2 as an example; and has multiple versions.
+Of these different versions of SaltProc, they have slightly different methods in how the depletion data is stored as well as how reprocessing rates are calculated.
+However, the two versions of interest are version 0.1 and 0.3, which use different batchwise reprocessing approaches.
+These two different approaches are referred to here as the "Bulk" approach and the "Steady" approach.
+
+SaltProc version 0.1 was the first full version of SaltProc publicly released, and provides all the functionality necessary for modeling the MSBR with batchwise reprocessing.
+Using this version, Rykhlevskii uses three day depletion steps and does not perform fractional reprocessing at each step, instead performing reprocessing according to the cycle times \cite{rykhlevskii_advanced_2018}.
+This approach is termed as the "Bulk" approach to batchwise reprocessing, and is explained in more detail below. This is the same approach used by Gehin and Powers for an analysis of the MSBR \cite{gehin_liquid_2016}.
+This version of SaltProc, version 0.1, makes use of the h5py Python package to handle the hdf5 data files which contain depletion data \cite{collette_python_hdf5_2014}. Within the hdf5 file, the atom density of each isotope before and after batchwise reprocessing is recorded as well as different reactor parameters, such as the neutron multiplication factor.
+
+SaltProc version 0.3 includes an example MSBR which users can run as soon as SaltProc is installed, though some of the run parameters such as neutrons per generation and run time have to be altered to generate a more valid model.
+This model also uses three day steps, but instead of performing the batch removal only at the cycle time value, this model removes a fraction every three days, which is called the "Steady" approach for batchwise reprocessing.
+Additionally, this version of SaltProc uses the PyTables Python package for handling the hdf5 data files. The data files are structured similarly to v0.1 of SaltProc, but instead of atom density they use mass, which makes analysis of the files slightly more user friendly.

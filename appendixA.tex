@@ -1,106 +1,136 @@
-
-%\section{Derivation of Batchwise Reprocessing Steady State Mass}
+This appendix serves as a supplement to the discussion in Section \ref{s:batch-sum}.
+Here, I show the steady state mass of some arbitrary nuclide which is processed using Steady batchwise reprocessing.
 
 The first step of this derivation is to separate the $\lambda$ term into the continuous $\lambda_c$, which is the continuous losses in the Bateman equation, and the batchwise reprocessing $\lambda_r$.
+This is given by:
 
 \begin{equation} \hfill
-\lambda = \lambda_c + \lambda_r
+\lambda = \lambda_c + \lambda_r.
 \hfill \end{equation}
 
 Next, set up and solve the differential equation for the continuous portions of the process.
+This is set as the rate of change of the mass over time is equivalent to the constant rate of gain, $C$, minus the continuous losses.
+This is given by:
 
 \begin{equation} \hfill
-\frac{dm}{dt} = C - \lambda_c m
+\frac{dm}{dt} = C - \lambda_c m,
+\hfill \end{equation}
+
+where
+
+\begin{equation} \hfill
+m(t) = \left(m_0 - \frac{C}{\lambda_c} \right) e^{-\lambda_c t}  + \frac{C}{\lambda_c}.
+\hfill \end{equation}
+
+Then, I modify the continuous equation to a process which updates at discrete time steps:
+
+\begin{equation} \hfill
+m_{n+1} = \left(m_n - \frac{C}{\lambda_c} \right) e^{-\lambda_c \Delta t}  + \frac{C}{\lambda_c}.
+\hfill \end{equation}
+
+After each new discrete time step, I apply the batchwise reprocessing. 
+Each time step is evaluated as a depletion time step.
+This is given by:
+
+\begin{equation} \hfill
+m_{n+1} = \left(\left(m_n - \frac{C}{\lambda_c} \right) e^{-\lambda_c \Delta t}  + \frac{C}{\lambda_c}\right) \left(1 - {\lambda_r \Delta t} \right).
+\hfill \label{eq:nplusone}\end{equation}
+
+From here, I define some arbitrary variables for ease of use:
+
+\begin{equation} \hfill
+\alpha = \frac{C}{\lambda_c},
 \hfill \end{equation}
 
 \begin{equation} \hfill
-m(t) = \left(m_0 - \frac{C}{\lambda_c} \right) e^{-\lambda_c t}  + \frac{C}{\lambda_c}
-\hfill \end{equation}
-
-Change the continuous process to one which updates at discrete time steps.
-
-\begin{equation} \hfill
-m_{n+1} = \left(m_n - \frac{C}{\lambda_c} \right) e^{-\lambda_c \Delta t}  + \frac{C}{\lambda_c}
-\hfill \end{equation}
-
-Apply the batchwise reprocessing after each new discrete time step, treating each time step evaluated as a depletion time step.
-
-\begin{equation} \hfill
-m_{n+1} = \left(\left(m_n - \frac{C}{\lambda_c} \right) e^{-\lambda_c \Delta t}  + \frac{C}{\lambda_c}\right) \left(1 - {\lambda_r \Delta t} \right)
-\hfill \end{equation}
-
-Define some arbitrary variables for ease of use.
-
-\begin{equation} \hfill
-\alpha = \frac{C}{\lambda_c}
+\epsilon = e^{-\lambda_c \Delta t},
 \hfill \end{equation}
 
 \begin{equation} \hfill
-\epsilon = e^{-\lambda_c \Delta t}
+\gamma = \left(1 - {\lambda_r \Delta t} \right).
 \hfill \end{equation}
 
+Using these in Equation \eqref{eq:nplusone}, the mass can be calculated for several subsequent steps.
+The more compact form of Equation \eqref{eq:nplusone} is given by:
+
 \begin{equation} \hfill
-\gamma = \left(1 - {\lambda_r \Delta t} \right)
+m_{n+1} = \left(\left(m_n - \alpha \right) \epsilon  + \alpha\right) \gamma.
+\hfill \label{eq:one} \end{equation}
+
+The initial condition is defined as:
+
+\begin{equation} \hfill
+m_0 = m_0.
+\hfill \label{eq:two} \end{equation}
+
+Combining Equations \eqref{eq:one} and \eqref{eq:two}, the first step is given by:
+
+\begin{equation} \hfill
+m_1 = m_0 \epsilon \gamma - \alpha \epsilon \gamma + \alpha \gamma,
 \hfill \end{equation}
 
-Using these simplified variables, the mass can be calculated for several subsequent steps.
+and the second step is given by:
 
 \begin{equation} \hfill
-m_{n+1} = \left(\left(m_n - \alpha \right) \epsilon  + \alpha\right) \gamma
+m_2 = m_0 \epsilon^2 \gamma^2 - \alpha \epsilon^2 \gamma^2 + \alpha \epsilon \gamma^2 - \alpha \epsilon \gamma + \alpha \gamma.
 \hfill \end{equation}
 
+Finally, the n$^{th}$ step mass can be derived by following the pattern shown in the previous equations.
+This is given by:
+
 \begin{equation} \hfill
-m_0 = m_0
+m_n = m_0 \epsilon^n \gamma^n + \alpha \sum_{j=1}^n \gamma^j (\epsilon^{j-1} - \epsilon^j).
 \hfill \end{equation}
 
+As the time approaches infinity, the steady state mass will be reached.
+Because this is an iterative process, this means $n$ will be set to approach infinity as well to reach steady state.
+%Moving towards the goal of the steady state mass, the value of $n$ is taken to be approaching infinity.
+Because the values of $\gamma$ and $\alpha$ are both between zero and one, simplifications can be made.
+This is given by:
+
 \begin{equation} \hfill
-m_1 = m_0 \epsilon \gamma - \alpha \epsilon \gamma + \alpha \gamma
+m_{ss} = m_0 \epsilon^{\infty} \gamma^{\infty} + \alpha \sum_{j=1}^{\infty} \gamma^j (\epsilon^{j-1} - \epsilon^j),
 \hfill \end{equation}
 
+which simplifies to:
+ 
 \begin{equation} \hfill
-m_2 = m_0 \epsilon^2 \gamma^2 - \alpha \epsilon^2 \gamma^2 + \alpha \epsilon \gamma^2 - \alpha \epsilon \gamma + \alpha \gamma
-\hfill \end{equation}
-
-From these steps, a more general formula can be derived.
-
-\begin{equation} \hfill
-m_n = m_0 \epsilon^n \gamma^n + \alpha \sum_{j=1}^n \gamma^j (\epsilon^{j-1} - \epsilon^j)
-\hfill \end{equation}
-
-Moving towards the goal of the steady state mass, the value of $n$ is taken to be approaching infinity. Because the values of $\gamma$ and $\alpha$ are both between zero and one, simplifications can be made.
-
-\begin{equation} \hfill
-m_{ss} = m_0 \epsilon^{\infty} \gamma^{\infty} + \alpha \sum_{j=1}^{\infty} \gamma^j (\epsilon^{j-1} - \epsilon^j)
-\hfill \end{equation}
-
-\begin{equation} \hfill
-m_{ss} = \alpha \sum_{j=1}^{\infty} \gamma^j (\epsilon^{j-1} - \epsilon^j)
+m_{ss} = \alpha \sum_{j=1}^{\infty} \gamma^j (\epsilon^{j-1} - \epsilon^j).
 \hfill \end{equation}
 
 The next step is to simplify the summation term by changing $\epsilon$ back to its original form.
+This is given by:
 
 \begin{equation} \hfill
-m_{ss} = \alpha \sum_{j=1}^{\infty} \gamma^j (e^{-\lambda_c \Delta t (j-1)} - e^{-\lambda_c \Delta t j})
+m_{ss} = \alpha \sum_{j=1}^{\infty} \gamma^j (e^{-\lambda_c \Delta t (j-1)} - e^{-\lambda_c \Delta t j}).
 \hfill \end{equation}
+
+Next, I group the exponential terms together that have $j$ in the exponent, given by:
 
 \begin{equation} \hfill
-m_{ss} = \alpha \sum_{j=1}^{\infty} \gamma^j e^{-\lambda_c \Delta t j} (e^{\lambda_c \Delta t} - 1)
+m_{ss} = \alpha \sum_{j=1}^{\infty} \gamma^j e^{-\lambda_c \Delta t j} (e^{\lambda_c \Delta t} - 1).
 \hfill \end{equation}
+
+The terms which multiply but do not contain $j$ from the summation can be pulled outside of the summation, given by:
 
 \begin{equation} \hfill
-m_{ss} = \alpha (e^{\lambda_c \Delta t} - 1) \sum_{j=1}^{\infty} \gamma^j e^{-\lambda_c \Delta t j} 
+m_{ss} = \alpha (e^{\lambda_c \Delta t} - 1) \sum_{j=1}^{\infty} \gamma^j e^{-\lambda_c \Delta t j}.
 \hfill \end{equation}
 
-Next, the infinite series can be solved by using the following equation.
+Next, the geometric series can be solved by using the following equation from \cite{Mathematica}:
 
 \begin{equation} \hfill
 \sum_{j=1}^{\infty} x^j = \frac{x}{1-x} \ni |x| < 1
 \hfill \end{equation}
 
+This yields the equation for the steady state mass:
+
 \begin{equation} \hfill
-m_{ss} = \alpha (e^{\lambda_c \Delta t} - 1) \frac{\gamma^j e^{-\lambda_c \Delta t j}}{1 - \gamma^j e^{-\lambda_c \Delta t j}}
+m_{ss} = \alpha (e^{\lambda_c \Delta t} - 1) \frac{\gamma^j e^{-\lambda_c \Delta t j}}{1 - \gamma^j e^{-\lambda_c \Delta t j}}.
 \hfill \end{equation}
 
-Plugging in the variables $\alpha$ and $\gamma$ yields the full equation for the steady state mass with batchwise reprocessing.
+Plugging in the variables $\alpha$ and $\gamma$ yields the full equation for the steady state mass with batchwise reprocessing:
 
-
+\begin{equation} \hfill 
+m_{ss} =  \frac{C}{\lambda - \lambda_r} \left(e^{(\lambda - \lambda_r) \Delta t} - 1 \right) \sum_{n=1}^{\infty} \left( \left(1 - \lambda_r \Delta t \right) e^{-(\lambda - \lambda_r) \Delta t} \right)^n.
+\hfill \end{equation}
