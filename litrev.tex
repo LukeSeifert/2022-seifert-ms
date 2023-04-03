@@ -247,7 +247,7 @@ This approach has a flaw which can be directly demonstrated through an example i
 \caption{Serpent2 Second Setting Approaches}
 \label{tab:cont_repr_appr}
 \begin{center}
-\begin{tabular}{ | c | c | c | c | c | c | c |}
+\begin{tabular}{ c | c | c | c | c | c | c }
  \hline
  Labels & Initial & Batch & Both Fit & $\alpha$ Fit & $\beta$ Fit & Zeroing Fit\\
  \hline
@@ -362,7 +362,7 @@ Table \ref{tab:msbr_gen_data} has general information on the MSBR, while Table \
 \caption{Summary of Principle Data for MSBR \cite{robertson_conceptual_1971}}
 \label{tab:msbr_gen_data}
 \begin{center}
-\begin{tabular}{ | c | c | }
+\begin{tabular}{ c | c }
  \hline
  Component & Data\\
  \hline
@@ -435,7 +435,7 @@ Table \ref{tab:msbr_salt_data} shows that the salt inventory in the core is appr
 \caption{MSBR Online Reprocessing Cycle Times \cite{robertson_conceptual_1971}}
 \label{tab:msbr_cycle_times}
 \begin{center}
-\begin{tabular}{ | p{0.27\linewidth} | p{0.25\linewidth} | p{0.35\linewidth} |}
+\begin{tabular}{ p{0.27\linewidth} | p{0.25\linewidth} | p{0.35\linewidth} }
  \hline
  Reprocessing Group & Element(s) & Cycle Time (Full Power)\\
  \hline
@@ -623,7 +623,7 @@ A mixture of batchwise and continuous methods can be implemented if the reproces
 
 Fiorina et al \cite{fiorina_preliminary_2012} is on the Molten Salt Fast Reactor (MSFR) and uses a modified version of the ERANOS-based EQL3D procedure. Fiorina et al make use of continuous reprocessing for non-soluble fission products, but uses batchwise reprocessing for soluble fission products. The batchwise reprocessing was incorporated for simplicity of implementation in the model. The time steps used are shorter at the beginning of cycle and extend out to roughly 30 year steps for a 200 year depletion. Additionally, the authors also performed a radiotoxicity analysis which extends out to one million years.
 
-Nagy et al \cite{nagy_parametric_2008} uses a toy model to go through different reprocessing schemes based on the MSBR and MOSART reprocessing designs \cite{robertson_conceptual_1971, ignatiev_progress_2007}. SCALE-5 XSDRN\cite{petrie_scale_2005} is used for neutron transport and ORIGEN-S is used for depletion. To account for DNPs, the authors assume that one-third of the delayed neutron precursors decay outside the core.
+Nagy et al \cite{nagy_parametric_2008} uses a toy model to go through different reprocessing schemes based on the MSBR and MOSART reprocessing designs \cite{robertson_conceptual_1971, ignatiev_progress_2007}. SCALE-5 XSDRN\cite{noauthor_scale_2005} is used for neutron transport and ORIGEN-S is used for depletion. To account for DNPs, the authors assume that one-third of the delayed neutron precursors decay outside the core.
 Using a delayed neutron fraction of 0.0027 for $^{233}$U, the authors claim that 0.0009, or 90 pcm, should be subtracted from the eigenvalue to approximate the impact from the movement of delayed neutron precursors.
 Depletion steps are performed every five days, during which continuous reprocessing was implemented for only gaseous fission product removal, while refueling and other fission products used batchwise reprocessing.
 The batchwise reprocessing was executed by altering the binary output of ORIGEN.
