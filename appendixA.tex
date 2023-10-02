@@ -22,10 +22,10 @@ where
 m(t) = \left(m_0 - \frac{C}{\lambda_c} \right) e^{-\lambda_c t}  + \frac{C}{\lambda_c}.
 \hfill \end{equation}
 
-Then, I modify the continuous equation to a process which updates at discrete time steps:
+Then, I modify the continuous equation to a process which updates at discrete time steps and is pre-reprocessing:
 
 \begin{equation} \hfill
-m_{n+1} = \left(m_n - \frac{C}{\lambda_c} \right) e^{-\lambda_c \Delta t}  + \frac{C}{\lambda_c}.
+m_{n+1}^{pre} = \left(m_n - \frac{C}{\lambda_c} \right) e^{-\lambda_c \Delta t}  + \frac{C}{\lambda_c}.
 \hfill \end{equation}
 
 After each new discrete time step, I apply the batchwise reprocessing. 
@@ -60,7 +60,7 @@ m_{n+1} = \left(\left(m_n - \alpha \right) \epsilon  + \alpha\right) \gamma.
 The initial condition is defined as:
 
 \begin{equation} \hfill
-m_0 = m_0.
+m(t=0) = m_0.
 \hfill \label{eq:two} \end{equation}
 
 Combining Equations \eqref{eq:one} and \eqref{eq:two}, the first step is given by:
@@ -82,17 +82,21 @@ This is given by:
 m_n = m_0 \epsilon^n \gamma^n + \alpha \sum_{j=1}^n \gamma^j (\epsilon^{j-1} - \epsilon^j).
 \hfill \end{equation}
 
-As the time approaches infinity, the steady state mass will be reached.
+As the time approaches infinity, the steady state mass will be reached:
+
+\begin{equation} \hfill
+m_{ss} = \lim_{t \rightarrow \infty} m(t).
+\hfill \end{equation}
+
 Because this is an iterative process, this means $n$ will be set to approach infinity as well to reach steady state.
 %Moving towards the goal of the steady state mass, the value of $n$ is taken to be approaching infinity.
-Because the values of $\gamma$ and $\alpha$ are both between zero and one, simplifications can be made.
 This is given by:
 
 \begin{equation} \hfill
-m_{ss} = m_0 \epsilon^{\infty} \gamma^{\infty} + \alpha \sum_{j=1}^{\infty} \gamma^j (\epsilon^{j-1} - \epsilon^j),
+m_{ss} = m_0 \epsilon^{\infty} \gamma^{\infty} + \alpha \sum_{j=1}^{\infty} \gamma^j (\epsilon^{j-1} - \epsilon^j).
 \hfill \end{equation}
 
-which simplifies to:
+The values of $\gamma$ and $\epsilon$ are between zero and one, so raising them to a large power makes them approach zero. The equation simplifies to:
  
 \begin{equation} \hfill
 m_{ss} = \alpha \sum_{j=1}^{\infty} \gamma^j (\epsilon^{j-1} - \epsilon^j).
@@ -117,10 +121,10 @@ The terms which multiply but do not contain $j$ from the summation can be pulled
 m_{ss} = \alpha (e^{\lambda_c \Delta t} - 1) \sum_{j=1}^{\infty} \gamma^j e^{-\lambda_c \Delta t j}.
 \hfill \end{equation}
 
-Next, the geometric series can be solved by using the following equation:
+This is of the form of a generic geometric series, which has a known convergence criteria and solution:
 
 \begin{equation} \hfill
-\sum_{j=1}^{\infty} x^j = \frac{x}{1-x} \ni |x| < 1
+\sum_{n=1}^{\infty} x^n = \frac{x}{1-x} \ni |x| < 1
 \hfill \end{equation}
 
 This yields the equation for the steady state mass:
@@ -134,3 +138,5 @@ Plugging in the variables $\alpha$ and $\gamma$ yields the full equation for the
 \begin{equation} \hfill 
 m_{ss} =  \frac{C}{\lambda - \lambda_r} \left(e^{(\lambda - \lambda_r) \Delta t} - 1 \right) \sum_{n=1}^{\infty} \left( \left(1 - \lambda_r \Delta t \right) e^{-(\lambda - \lambda_r) \Delta t} \right)^n.
 \hfill \end{equation}
+
+

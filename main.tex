@@ -15,7 +15,8 @@
 \usepackage{float} 
 \newcommand{\Cycamore}{\textsc{Cycamore}\xspace}
 \newcommand{\Cyclus}{\textsc{Cyclus}\xspace}
-
+\newcommand{\minus}{\scalebox{0.65}[1.0]{$-$}}
+\newcommand{\mycomment}[1]{}
 
 \usepackage{placeins}
 \usepackage{booktabs} % nice rules (thick lines) for tables
@@ -102,7 +103,7 @@
 %% Note that ProQuest truncates their abstracts at 350 words.
 \begin{abstract}
 
-Molten salt reactor modeling can be challenging in liquid fueled cores as the composition varies temporally and spatially.
+Molten salt reactor modeling can be challenging in liquid fueled cores as the fuel composition varies temporally and spatially.
 Although these models are challenging, they are important for predicting reactor safety and performance during operation.
 %Molten salt reactors have had many depletion models generated since being announced as a generation IV reactor.
 %To maintain stability and limit chemical corrosion, often molten salt reactors utilize online reprocessing.
@@ -118,8 +119,8 @@ In order to simulate reprocessing computationally, there are two different mathe
 The continuous reprocessing method is more physically reflective of the operation in reality for any reactor which uses a continuous chemical reprocessing scheme.
 However, there are many works which have implemented batchwise reprocessing to simulate a continuous reprocessing process.
 In this thesis, I show that continuous reprocessing and batchwise reprocessing methods are not interchangeable, and there is a fairly large difference in the results when using each approach for the same system.
-I also investigate the computational cost of different reprocessing methods by performing a depletion step mesh refinement study.
-In this study, I found that continuous reprocessing allows for significantly larger steps without large increases in error, which enables drastically reduced computational cost.
+I also investigate the computational cost of different reprocessing methods by performing a depletion time step refinement study.
+In this study, I found that continuous reprocessing allows for significantly larger time steps without large increases in error, which reduces computational cost.
 However, continuous reprocessing does not necessarily keep the overall mass constant, thus potentially leading to an nonphysical solution.
 I compare the differences between both methods while determining the effect of this nonphysical mass change caused by continuous reprocessing.
 %Part of the comparison also looks at benefits to using batchwise reprocessing, which is able to maintain the net core mass so that the problem remains physical.
