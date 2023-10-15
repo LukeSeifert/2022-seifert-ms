@@ -2,55 +2,70 @@
 \setcounter{tocdepth}{5}
 \setcounter{secnumdepth}{5}
 
+In this chapter, I will provide an overview of MSR depletion modeling in the literature. First, I will discuss the different reprocessing methods and treatment of delayed neutron precursors. I will also discuss the MSBR specifically, as the MSBR is the reactor used to generate the results in this work.
+I will next provide a discussion on SaltProc, the batchwise reprocessing tool used for generating batchwise results in this work.
+I will conclude the section by providing information on different depletion codes and how they have been applied to various MSRs. This will cover the state of the literature in terms of handling reprocessing in depletion simulations. This set of works will also show the number of applications which have employed batchwise methods to approximate continuous reprocessing schemes. This is important, because a key takeaway of this work is that this approximation causes a buildup of error in the material composition.
 
-In this chapter, I will provide an overview of MSR depletion modeling in the literature. First, I will discuss the different reprocessing methods and treatment of delayed neutron precursors. I will then provide information on different depletion codes and how they have been applied to various MSRs. This will cover the state of the literature in terms of handling reprocessing in depletion simulations. This set of works will also show the number of applications which have employed batchwise methods to approximate continuous reprocessing schemes. This is important, because a key takeaway of this work is that this approximation causes a buildup of error in the material composition. I will also discuss the MSBR specifically, as the MSBR is the reactor used to generate the results in this work.
+%\section{REMOVE}
 
-\section{Modeling Requirements for Molten Salt Reactors}
+%Modeling and simulation of liquid fueled molten salt reactors (MSRs) differs from solid fueled reactors in two main areas. The first is in the fresh fuel feed and fission product removal streams used during operation in MSRs (also referred to as online reprocessing). Modeling an MSR without online reprocessing will cause discrepancies that will increase as the net depletion time increases.
+%This is a result of neutronic differences that arise from a lack of fresh fuel and buildup of fission products. In order to simulate this reprocessing functionality, software can use batchwise and continuous reprocessing methods.
 
-Modeling and simulation of liquid fueled molten salt reactors (MSRs) differs from solid fueled reactors in two main areas. The first is in the fresh fuel feed and fission product removal streams used during operation in MSRs; which is referred to as online reprocessing. Modeling an MSR without online reprocessing will cause discrepancies that will increase as the net depletion time increases.
-This is a result of neutronic differences that arise from a lack of fresh fuel and buildup of fission products. In order to simulate this reprocessing functionality, software can use batchwise and continuous reprocessing methods.
-
-The second difference is in the movement of the fuel salt, which causes the fuel and, consequently, the delayed neutron precursors (DNPs) to move in the core. Because the DNPs have different half lives before the delayed neutrons are born, the effect of the fuel movement on each precursor group varies. However, the overall result is that some of the delayed neutrons are birthed in regions outside of the active core, such as external piping, which means there is a reduced effective delayed neutron fraction in the core.
-This fraction is important for safe operation and reactivity control, so modeling it accurately is important to advancing this technology.
+%The second difference is in the movement of the fuel salt, which causes the fuel and, consequently, the delayed neutron precursors (DNPs) to move in the core. Because the DNPs have different half lives before the delayed neutrons are born, the effect of the fuel movement on each precursor group varies.
+%However, the overall result is that some of the delayed neutrons are birthed in regions outside of the active core, such as external piping.
+%This effect leads to a reduced effective delayed neutron fraction in the core.
+%This fraction is important for safe operation and reactivity control, so modeling it accurately is important to advancing this technology.
 %Modeling and simulation of liquid fueled molten salt reactors (MSRs) is different from modeling and simulation of solid fueled reactors in a few different areas. Two main areas of particular importance are the online reprocessing functionality and the movement of the fuel through the reactor. The online reprocessing functionality involves removing fission products from the fuel and adding fresh fuel during operation. The movement of the fuel causes a shift in the location of delayed neutron precursors (DNPs). In solid fueled reactors, the distribution of DNPs follows the flux profile, while in MSRs the DNPs move along with the fuel. This results in a reduction in the effective delayed neutron fraction due to decay of DNPs in less important regions.
 
-\subsection{Online Reprocessing}
+%\subsection{Online Reprocessing}
 
-The online reprocessing functionality of MSRs, such as fresh fuel feed and/or fission product removal, is specified in the literature using the elemental cycle times from a reactor's reprocessing scheme. These elemental cycle times specify the rate of removal of that given element, where the mass removal rate will scale based on the cycle time and the amount of that element present in the reactor. From this data, the online reprocessing is simulated in different ways depending on the particular software used, and depending on the methods employed by that software. The two main ways to approach online reprocessing are to use either batchwise reprocessing or continuous reprocessing methods. 
-A more in depth explanation of the reprocessing methods will be provided in the Methodology section, but in general, the batchwise method performs discrete compositional updates at given time steps while the continuous method modifies the depletion matrix such that the modifications to the composition due to online reprocessing happen continuously independent of the time steps. 
+%The online reprocessing functionality of MSRs, such as fresh fuel feed and/or fission product removal, is specified in the literature using the elemental cycle times from a reactor's reprocessing scheme.
+%These elemental cycle times specify the rate of removal of that given element, where the mass removal rate will scale based on the cycle time and the amount of that element present in the reactor.
+%From this data, the online reprocessing is simulated in different ways depending on the particular software used, and depending on the methods employed by that software.
+%The two main ways to approach online reprocessing are to use either batchwise reprocessing or continuous reprocessing methods. 
+%A more in depth explanation of the two main reprocessing methods, continuous and batchwise, will be provided in the Methodology section.
+%However, in general, the batchwise method performs discrete compositional updates at given time steps while the continuous method modifies the depletion matrix such that the modifications to the composition due to online reprocessing happen continuously independent of the time steps. 
 
 
 %For these approaches, the physical process may represent either approach, such as continuously removing protactinium from the core, but adding in the uranium it decays into only after some time has elapsed.
-A purely batchwise approach without a sufficiently short time step will not fit the reprocessing design used by an MSR, as online reprocessing is carried out continuously. 
-For the batchwise method to fit a continuous reprocessing scheme, the time step would need to be on the same time scale as the shortest cycle time, where the cycle time is time it takes for a given element to be completely removed.
-For the MSBR, the shortest cycle time is 20 seconds, which would make a depletion simulation on the order of years much more computationally expensive than it would otherwise be. Even if transport simulations are not repeated, a single simulated year with 20 second time steps would require 21,915 depletion calculations to be completed.
-The batchwise method can accurately model a reprocessing scheme which uses batchwise reprocessing, such as a scheme which has salt entirely replaced after some given amount of time. An example of this is a salt discard, which occurs after a set amount of time. An entirely batchwise reprocessing scheme for an MSR would be neglecting the benefit of a liquid fuel, so such a scheme is not common in the literature.
+%A purely batchwise approach without a sufficiently short time step will not fit the reprocessing design used by an MSR, as online reprocessing is carried out continuously. 
+%For the batchwise method to fit a continuous reprocessing scheme, the time step would need to be on the same time scale as the shortest cycle time, where the cycle time is time it takes for a given element to be completely removed.
+%For the MSBR, the shortest cycle time is 20 seconds, which would make a depletion simulation on the order of years much more computationally expensive than it would otherwise be. Even if transport simulations are not repeated, a single simulated year with 20 second time steps would require 21,915 depletion calculations to be completed.
+%The batchwise method can accurately model a reprocessing scheme which uses batchwise reprocessing, such as a scheme which has salt entirely replaced after some given amount of time. An example of this is a salt discard, which occurs after a set amount of time. An entirely batchwise reprocessing scheme for an MSR would be neglecting the benefit of a liquid fuel, so such a scheme is not common in the literature.
 %An MSR using offline reprocessing, however, can be accurately represented using purely batchwise reprocessing.
 
 %Codes implement batchwise reprocessing by running the simulation, stopping, and then adding and removing materials. The process is then iterated. This method is useful in that it is fairly straightforward to implement, can be calibrated to different removal efficiencies, and makes mass balancing of the core straightforward. Some issues with the batchwise approach are that using large time steps will make the results more inaccurate, it has increased computational cost with smaller time steps, and it is an approximation of the actual physical process of reprocessing. It is an approximation because, in online reprocessing of a reactor, the fission products are continuously removed while any feed flows are continuously fed into the reactor.
-Two different codes which treat batchwise reprocessing are SaltProc, which is discussed later in this chapter, and older versions of ChemTriton. Although they are distinct and have different use cases, for the purposes of this work, I am interested in the treatment of batchwise reprocessing in these codes. These codes both implement batchwise reprocessing by running the depletion simulation for a fixed amount of time, then stopping, and then adding and removing materials \cite{rykhlevskii_modeling_2019, betzler_molten_2017}. These codes iterate through this process for each depletion step until they reach the final time.
+%Two different codes which treat batchwise reprocessing are SaltProc, which is discussed later in this chapter, and older versions of ChemTriton. Although they are distinct and have different use cases, for the purposes of this work, I am interested in the treatment of batchwise reprocessing in these codes. These codes both implement batchwise reprocessing by running the depletion simulation for a fixed amount of time, then stopping, and then adding and removing materials \cite{rykhlevskii_modeling_2019, betzler_molten_2017}. These codes iterate through this process for each depletion step until they reach the final time.
 
-This method is useful because it is fairly straightforward to implement, easy to customize, and makes mass balancing of the core straightforward. Some issues with the batchwise approach are that using large time steps will make the results less accurate; it has to rerun the transport simulation for each time step for pre-reprocessing and post-reprocessing; and it is an approximation of the actual physical process of reprocessing.
-In an operating MSR, the fission products are continuously removed while any feed flows are continuously fed into the reactor, not removed in batches.
-The reason that large time steps make the results less accurate can be made clear by imagining the limiting case, a single very large depletion step.
-Taking a very large time step would mean that all of the reprocessing that should have taken place during that time step does not.
-For example, instead of removing the xenon every 20 seconds, there is only a single removal at the very end after potentially years.
-This means that the parasitic absorption of neutrons by fission products is not at all reduced over the entire depletion step, but instead the composition is only adjusted at the very end.
-This example makes clear why small depletion steps are requiredIn this chapter, I will provide an overview of MSR depletion modeling in the literature. First, I will discuss the different reprocessing methods and treatment of delayed neutron precursors. I will then provide information on different depletion codes and how they have been applied to various MSRs. This will cover the state of the literature in terms of handling reprocessing in depletion simulations. This set of works will also show the number of applications which have employed batchwise methods to approximate continuous reprocessing schemes. This is important, because a key takeaway of this work is that this approximation causes a buildup of error in the material composition. I will also discuss the MSBR specifically, as the MSBR is the reactor used to generate the results in this work.
+%This method is useful because it is fairly straightforward to implement, easy to customize, and makes mass balancing of the core straightforward. Some issues with the batchwise approach are that using large time steps will make the results less accurate; it has to rerun the transport simulation for each time step for pre-reprocessing and post-reprocessing; and it is an approximation of the actual physical process of reprocessing.
+%In an operating MSR, the fission products are continuously removed while any feed flows are continuously fed into the reactor, not removed in batches.
+%The reason that large time steps make the results less accurate can be made clear by imagining the limiting case, a single very large depletion step.
+%Taking a very large time step would mean that all of the reprocessing that should have taken place during that time step does not.
+%For example, instead of removing the xenon every 20 seconds, there is only a single removal at the very end after potentially years.
+%This means that the parasitic absorption of neutrons by fission products is not at all reduced over the entire depletion step, but instead the composition is only adjusted at the very end.
+%This example makes clear why small depletion steps are required.
+%In this chapter, I will provide an overview of MSR depletion modeling in the literature by covering the following topics: modeling requirements for depletion simulations of MSRs, an overview of the MSBR, the SaltProc tool, and MSR depletion model approaches used in the literature.
+%First, I will discuss the different reprocessing methods and treatment of delayed neutron precursors. I will then provide information on different depletion codes and how they have been applied to various MSRs. This will cover the state of the literature in terms of handling reprocessing in depletion simulations. This set of works will also show the number of applications which have employed batchwise methods to approximate continuous reprocessing schemes. This is important, because a key takeaway of this work is that this approximation causes a buildup of error in the material composition. I will also discuss the MSBR specifically, as the MSBR is the reactor used to generate the results in this work.
 
 \section{Modeling Requirements for Molten Salt Reactors}
 
-Modeling and simulation of liquid fueled molten salt reactors (MSRs) differs from solid fueled reactors in two main areas. The first is in the fresh fuel feed and fission product removal streams used during operation in MSRs; which is referred to as online reprocessing. Modeling an MSR without online reprocessing will cause discrepancies that will increase as the net depletion time increases.
+Modeling and simulation of liquid fueled molten salt reactors (MSRs) differs from solid fueled reactors in two main areas. The first is in the fresh fuel feed and fission product removal streams used during operation in MSRs (also referred to as online reprocessing). Modeling an MSR without online reprocessing will cause discrepancies that will increase as the net depletion time increases.
 This is a result of neutronic differences that arise from a lack of fresh fuel and buildup of fission products. In order to simulate this reprocessing functionality, software can use batchwise and continuous reprocessing methods.
 
-The second difference is in the movement of the fuel salt, which causes the fuel and, consequently, the delayed neutron precursors (DNPs) to move in the core. Because the DNPs have different half lives before the delayed neutrons are born, the effect of the fuel movement on each precursor group varies. However, the overall result is that some of the delayed neutrons are birthed in regions outside of the active core, such as external piping, which means there is a reduced effective delayed neutron fraction in the core.
+The second difference is in the movement of the fuel salt, which causes the fuel and, consequently, the delayed neutron precursors (DNPs) to move in the core. Because the DNPs have different half lives before the delayed neutrons are born, the effect of the fuel movement on each precursor group varies.
+However, the overall result is that some of the delayed neutrons are birthed in regions outside of the active core, such as external piping.
+This effect leads to a reduced effective delayed neutron fraction in the core.
 This fraction is important for safe operation and reactivity control, so modeling it accurately is important to advancing this technology.
 %Modeling and simulation of liquid fueled molten salt reactors (MSRs) is different from modeling and simulation of solid fueled reactors in a few different areas. Two main areas of particular importance are the online reprocessing functionality and the movement of the fuel through the reactor. The online reprocessing functionality involves removing fission products from the fuel and adding fresh fuel during operation. The movement of the fuel causes a shift in the location of delayed neutron precursors (DNPs). In solid fueled reactors, the distribution of DNPs follows the flux profile, while in MSRs the DNPs move along with the fuel. This results in a reduction in the effective delayed neutron fraction due to decay of DNPs in less important regions.
 
 \subsection{Online Reprocessing}
 
-The online reprocessing functionality of MSRs, such as fresh fuel feed and/or fission product removal, is specified in the literature using the elemental cycle times from a reactor's reprocessing scheme. These elemental cycle times specify the rate of removal of that given element, where the mass removal rate will scale based on the cycle time and the amount of that element present in the reactor. From this data, the online reprocessing is simulated in different ways depending on the particular software used, and depending on the methods employed by that software. The two main ways to approach online reprocessing are to use either batchwise reprocessing or continuous reprocessing methods. 
-A more in depth explanation of the reprocessing methods will be provided in the Methodology section, but in general, the batchwise method performs discrete compositional updates at given time steps while the continuous method modifies the depletion matrix such that the modifications to the composition due to online reprocessing happen continuously independent of the time steps. 
+The online reprocessing functionality of MSRs, such as fresh fuel feed and/or fission product removal, is specified in the literature using the elemental cycle times from a reactor's reprocessing scheme. These elemental cycle times specify the rate of removal of that given element, where the mass removal rate will scale based on the cycle time and the amount of that element present in the reactor.
+From this data, the online reprocessing is simulated in different ways depending on the particular software used, and depending on the methods employed by that software.
+%The two main ways to approach online reprocessing are to use either batchwise reprocessing or continuous reprocessing methods. 
+A more in depth explanation of the two main reprocessing methods, continuous and batchwise, will be provided in the Methodology section.
+However, in general, the batchwise method performs discrete compositional updates at given time steps while the continuous method modifies the depletion matrix such that the modifications to the composition due to online reprocessing happen continuously independent of the time steps. 
+%A more in depth explanation of the reprocessing methods will be provided in the Methodology section, but in general, the batchwise method performs discrete compositional updates at given time steps while the continuous method modifies the depletion matrix such that the modifications to the composition due to online reprocessing happen continuously independent of the time steps. 
 
 
 %For these approaches, the physical process may represent either approach, such as continuously removing protactinium from the core, but adding in the uranium it decays into only after some time has elapsed.
@@ -65,7 +80,7 @@ For the MSBR, the shortest cycle time is 20 seconds, which would make a depletio
 Two different codes which treat continuous reprocessing are Serpent2 and ChemTriton. Serpent2 is a continuous energy Monte Carlo transport code which also has depletion functionality and a more recently added continuous reprocessing functionality \cite{aufiero_extended_2013}. ChemTriton is a Python script developed to interface with SCALE/TRITON, where the more recent updates have been directly implemented into SCALE to handle continuous reprocessing \cite{jr_vicente_valdez_modeling_2020}.
 
 These codes implement continuous reprocessing by adding terms to the Bateman equation similar to an extra decay term, as can be seen in Equation (\ref{eq:Bateman_type_one_decay_dupe}). The benefits of using continuous reprocessing are that the model is more physically accurate and it allows for larger time steps to be used without increasing error. However, the largest time step size cannot become too large, or the simulation will lose accuracy due to the lack of updated cross section data from transport simulations.
-The exact value of the largest time step while remaining sufficiently accurate is dependent upon the reactor, the rate at which the material composition changes, and the level of accuracy which is desired.
+The exact value of the largest time step, while remaining sufficiently accurate, is dependent upon the reactor, the rate at which the material composition changes, and the level of accuracy which is desired.
 This is because the neutron spectrum and cross section data does not update to the new material compositions until a new depletion step begins. 
 
 
@@ -115,7 +130,7 @@ Examples of the Steady batchwise method can be seen in Table \ref{tab:example_st
     \label{tab:example_steady_batchwise}
 \end{table}
 
-An alternative approach is to establish a depletion time step, $\Delta t$, such that the cycle time, $T_{cyc}$, is a multiple of $\Delta t$. Then, the fractional batchwise removal, $f$, occurs at the steps when $\Delta t$ is a multiple of $T_{cyc}$, removing the need for scaling. This method is called Bulk batchwise reprocessing because it performs reprocessing all at once in a bulk manner. This approach was implemented in the early versions of SaltProc \cite{rykhlevskii_modeling_2019}.
+Additionally, another approach is to establish a depletion time step, $\Delta t$, such that the cycle time, $T_{cyc}$, is a multiple of $\Delta t$. Then, the fractional batchwise removal, $f$, occurs at the steps when $\Delta t$ is a multiple of $T_{cyc}$, removing the need for scaling. This method is called Bulk batchwise reprocessing because it performs reprocessing all at once in a bulk manner. This approach was implemented in the early versions of SaltProc \cite{rykhlevskii_modeling_2019}.
 
 \begin{equation} \hfill 
 \gamma = f \frac{\Delta t}{T_{cyc}}
@@ -128,9 +143,10 @@ One example of implementing bulk batchwise reprocessing can be seen in the deple
 \subsubsection{Continuous Reprocessing}
 
 %For a continuous approach, removing some fraction is dependent upon the particular isotope since the approach involves adding a term to the Bateman equation. This is one of the methods used in Serpent2 continuous reprocessing, where separations are only performed based on the element, not each particular isotope, an extension developed by Aufiero et al. \cite{aufiero_extended_2013}. Equation \ref{eq:Bateman_default} shows the generic form of the Bateman equation, while Equation \ref{eq:Bateman_type_one_decay} shows the terms added to Equation \ref{eq:Bateman_default}, which are the reprocessing constants, or $\lambda_{r}$ added. 
-The continuous reprocessing method involves directly modifying the Bateman equation, shown in Equation \eqref{eq:Bateman_default}. Within this method, there are different approaches. For example, Serpent2 offers three different approaches, including a decay-like term, a constant term over each depletion time step, and a constant term which does not conserve mass. These approaches will be referred to as "decay", "step", and "constant".
+The continuous reprocessing method involves directly modifying the Bateman equation, shown in Equation \eqref{eq:Bateman_default}. Within this method, there are different approaches. For example, Serpent2 offers three different approaches: a decay-like term, a constant term over each depletion time step, and a constant term which does not conserve mass. These approaches will be referred to as "decay", "step", and "constant".
 
-One of the continuous reprocessing methods used in Serpent2 continuous reprocessing, an extension developed by Aufiero et al, is a decay-like approach and is referred to here as "decay" continuous reprocessing \cite{aufiero_extended_2013}. Equation \eqref{eq:Bateman_default} shows the Bateman equation with production and loss exclusively from fission, absorption, and decay; and Equation \eqref{eq:Bateman_type_one_decay} shows the Bateman equation with the removal from reprocessing subtracted and addition from feed sources added.
+One of the continuous reprocessing methods used in Serpent2 continuous reprocessing, an extension developed by Aufiero et al, is a decay-like approach and is referred to here as "decay" continuous reprocessing \cite{aufiero_extended_2013}. Equation \eqref{eq:Bateman_default} shows the Bateman equation with production and loss exclusively from fission, absorption, and decay.
+Equation \eqref{eq:Bateman_type_one_decay} shows the Bateman equation with the removal from reprocessing subtracted and addition from feed sources added.
 %Equation (\ref{eq:Bateman_type_one_decay}) shows the terms added to Equation (\ref{eq:Bateman_default}), which are the reprocessing constants, $\lambda_{r}$, which is of the same form of radioactive decay, hence the name "decay" continuous reprocessing. These terms represent removal of the current isotope as well as feed of the current isotope from other sources.
 
 \begin{equation} \hfill
@@ -171,7 +187,7 @@ Equation \eqref{eq:Bateman_type_one_decay} shows that the reprocessing removal h
 
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.5]{images/msr-feed-repr.png}
+  \includegraphics[scale=0.15]{images/msr-feed-repr.png}
   \caption{Simplified model of how Bateman equation relates to mass flow rates.}
    \label{fig:msr-outline-fig-show}
 \end{figure}
@@ -313,7 +329,7 @@ This analysis shows that, for this reprocessing approach to function properly, t
 
 The movement of DNPs in liquid fueled molten salt reactors impacts the operation of the reactor \cite{wooten_review_2018, aufiero_calculating_2014}. %directly since the decay of the precursors occurs at a different location compared to a static reactor \cite{wooten_review_2018, aufiero_calculating_2014}.
 There are several effects which this movement can have on the reactor. %Since the delayed neutron precursors move,
-As the core salt recirculates, there is a probability of fission product decay in non-core regions of the reactor, meaning there are fewer delayed neutrons in the core. This results in a reduced effective delayed neutron fraction, which reduces controllability of the reactor. Additionally, as delayed neutrons have a softer spectrum than prompt neutrons, reactors with recirculating fuel will have a spectrum-hardening effect.
+As the core salt recirculates, there is a probability of fission product decay in non-core regions of the reactor, meaning there are fewer delayed neutrons in the core. This results in a reduced effective delayed neutron fraction, which reduces controllability of the reactor. Additionally, as delayed neutrons have a softer energy spectrum than prompt neutrons, reactors with recirculating fuel will have a spectrum-hardening effect.
 In a solid fueled reactor, the flux and the concentration of delayed neutron precursors have the same profile. However, a moving fluid fuel causes the precursors to have a shifted profile based on the fluid flow rate, mixing, and decay rate of the precursors. This was shown by Jun Shi and Massimiliano Fratoni in their work, which is illustrated in Figure \ref{fig:genfoam_dnp_locations} \cite{shi_gen-foam_2021}. 
 
 %\begin{figure}[H]
@@ -353,21 +369,25 @@ In a solid fueled reactor, the flux and the concentration of delayed neutron pre
 
 
 
-Figure \ref{fig:genfoam_dnp_locations} shows that for the shortest lived DNPs, the movement of the fuel does not have any significant impact upon the DNP distribution when compared to static fuel. This is reasonable since the precursors do not live for very long in this group, so they do not have much chance to travel. For the intermediate DNP group, there is a clear shift in the direction of the fuel flow, which causes more precursors to produce delayed neutrons in the less important piping  and upper plenum regions. The longest lived DNP group seems to be spread almost equally throughout the entire reactor, which means that those delayed neutrons are contributing significantly less to the overall neutron economy. This reduces the overall effective delayed neutron fraction since the delayed neutrons are in less important regions. This directly affects the controllability of the reactor through the reactor period, which is heavily dependent upon the delayed neutrons.
+Figure \ref{fig:genfoam_dnp_locations} shows that for the shortest lived DNPs, the movement of the fuel does not have any significant impact upon the DNP distribution when compared to static fuel. This is reasonable since the precursors do not live for very long in this group, so they do not have much chance to travel. For the intermediate DNP group, there is a clear shift in the direction of the fuel flow, which causes more precursors to produce delayed neutrons in the less important piping  and upper plenum regions. The longest lived DNP group seems to be spread almost equally throughout the entire reactor, meaning those delayed neutrons are contributing significantly less to the overall neutron economy. This reduces the overall effective delayed neutron fraction since the delayed neutrons are in less important regions. This directly affects the controllability of the reactor through the reactor period, which is heavily dependent upon the delayed neutrons.
 
 \subsection{Depletion}
 
-Depletion is the process of burning the fuel, calculating the changes to the material composition this causes. Simulating depletion requires specific information to accurately model the depletion process, such as decay constants, fission yields, and fission and transmutation cross section data. The fission and transmutation cross section data can come from a transport calculation, while the other data can be read from a data library \cite{leppanen_development_2007}. Running depletion entails numerically solving the Bateman equations; a generalized form of which is in Equation \ref{eq:Bateman_default}.
+Depletion is the process of burning the fuel and calculating the changes to the material composition this causes. Simulating depletion requires specific information to accurately model the depletion process, such as decay constants, fission yields, and fission and transmutation cross section data. The fission and transmutation cross section data can come from a transport calculation, while the other data can be read from a data library \cite{leppanen_development_2007}. Running depletion entails numerically solving the Bateman equations; a generalized form of which is in Equation \ref{eq:Bateman_default}.
 
 The matrix form can be seen in \eqref{eq:mat_Bate}, where $N$ is a vector of compositions, and $A$ is the depletion matrix. This matrix contains the gain and loss terms for each nuclide in $N$, which vary continuously as a function of time and depend on the concentrations as well. Further documentation on treatment of depletion of these terms can be found in the OpenMC documentation, an open source Monte Carlo transport code which has built-in depletion solvers \cite{romano_openmc_2015}.
 
 \begin{equation}
-    \frac{dn}{dt} = A n
+    \frac{dN}{dt} = A N
     \label{eq:mat_Bate}
 \end{equation}
 
 There are several different approaches to solving this equation, such as the Transmutation Trajectory Analysis (TTA) method and the Chebyshev Rational Approximation Method (CRAM). Both of these methods are built into Serpent2 %, and are both built into Serpent2 
-\cite{leppanen_serpent_2015}. Other codes may use external software to compute depletion, such as REM, an in-house code used by Nuttin et al. \cite{nuttin_potential_2005} to implement Fourth order Runge–Kutta, used by MCNP and ORIGEN-S, a modified form of ORIGEN \cite{hermann_origen-s_1984} to treat time dependent data libraries which uses a power series approximation to treat the depletion matrix exponential, used by KENO-VI \cite{aufiero_extended_2013}. Another code %, aside from Serpent2,
+\cite{leppanen_serpent_2015}. 
+Other codes may use external software to compute depletion, such as REM, an in-house code used by Nuttin et al. \cite{nuttin_potential_2005} to implement Fourth order Runge–Kutta.
+Codes may also use a power series approximation of the matrix exponential, as discussed by Aufiero et al. \cite{aufiero_extended_2013}.
+%Another approach used by MCNP and ORIGEN-S, a modified form of ORIGEN \cite{hermann_origen-s_1984} to treat time dependent data libraries which uses a power series approximation to treat the depletion matrix exponential, used by KENO-VI \cite{aufiero_extended_2013}.
+Another code %, aside from Serpent2,
 that contains built-in depletion solvers is ERANOS, which is a diffusion transport solver which also uses a power series approximation to handle the depletion solution generation \cite{aufiero_extended_2013}. Overall, there are many different approaches to solving the depletion equation with different computational costs and levels of accuracy. Building a code to handle depletion requires only two items. The first is an input of data to generate the depletion matrix, including flux, cross sections, branching ratios, fission yields, decay constants, and more, depending on the level of detail desired. The other part of depletion is numerically solving the matrix problem, which may be coupled for different materials depending on if materials interact with each other.
 
 The purpose behind solving these equations and having depletion models is to generate an accurate representation of the composition of the target materials during reactor operation. This is important in determining how long the reactor can run, how the safety of the reactor develops over time, and how operation may have to change to adjust to the new reactor state. For molten salt reactors, depletion also allows for information regarding fresh fuel feed rate and fission product removal rates, as well as how variations of those parameters can affect reactor performance and behaviour.
@@ -389,7 +409,7 @@ The purpose behind solving these equations and having depletion models is to gen
 In this work, I will apply the previously described methods to the Molten Salt Breeder Reactor (MSBR). The MSBR is a useful design to analyze for several reasons. Because it is a liquid-fueled molten salt reactor, online reprocessing is used within the design.
 In addition, it contains an inner and outer zone, zone I and II, respectively, each of which has different neutronic behaviour \cite{robertson_conceptual_1971}.
 A portion of the core geometry is shown in Figure \ref{fig:msbr_ryklev}.
-Of note in this figure are the inner and outer core zones, with explicit differences in neutronic behavior.
+%Of note in this figure are the inner and outer core zones, with explicit differences in neutronic behavior.
 More specifically, the inner zone has a softer spectrum, a higher fission rate, and a 13\% fuel-to-graphite ratio \cite{park_whole_2015}.
 The outer zone has a harder spectrum, a higher breeding rate, and a 37\% fuel-to-graphite ratio.
 The differences between the inner and outer zones prove to be an issue when accurately modeling using a unit-cell or one-region approach, as those models are unable to capture the different characteristics of each region \cite{rykhlevskii_modeling_2019}.
@@ -565,7 +585,7 @@ The core geometry uses the correct dimensions, which allows cross sections to re
 \subsection{Reprocessing}
 \label{s:SP-repr}
 
-SaltProc is used to handle batchwise reprocessing in this work because it uses Serpent2, which has built-in continuous reprocessing; comes with the MSBR geometry in Serpent2 as an example; and has multiple versions.
+SaltProc is used to handle batchwise reprocessing in this work because it uses Serpent2, which has built-in continuous reprocessing, comes with the MSBR geometry in Serpent2 as an example, and has multiple versions.
 Of these different versions of SaltProc, they have slightly different methods in how the depletion data is stored as well as how reprocessing rates are calculated.
 However, the two versions of interest are version 0.1 and 0.3, which use different batchwise reprocessing approaches.
 These two different approaches are referred to here as the "Bulk" approach and the "Steady" approach.
@@ -588,7 +608,8 @@ Additionally, this version of SaltProc uses the PyTables Python package for hand
 \section{MSR Modeling Approaches}
 \label{s:models-methods}
 
-For modeling of MSRs, it is important to model discrete behavior, without considering fuel depletion, and temporal behavior, where fuel depletion is considered, in core physics.
+For modeling of MSRs, it is important to model discrete behavior and temporal behavior in core physics.
+In this work, discrete modeling is defined as models which do not consider depletion of the fuel, while temporal models do.
 %The first takes a given fuel composition and analyzes the performance of the reactor given that fuel composition. This may include
 With discrete modeling, one may aim to focus on aspects such as DNP movement \cite{fei_molten_2020, shi_gen-foam_2021} or reactor physics, such as kinetics and dynamics \cite{singh_plant-level_2020, cervi_development_2019, aufiero_development_2014, cui_development_2022, singh_dynamics_2017}.
 This type of model typically is focused on the order of seconds.
@@ -741,3 +762,4 @@ Because this approximation is common and is likely to continue in the future, it
 It is well understood that smaller step sizes are required for batchwise methods to approximate continuous methods, but there has yet to be a full analysis on how the results for an MSR using the two different methods compare.
 This is the gap that this work seeks to fill.
 I will show how the eigenvalue and various isotopic compositions vary while altering only the reprocessing methods implemented.
+

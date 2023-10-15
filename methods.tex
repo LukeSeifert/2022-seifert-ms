@@ -6,7 +6,7 @@
 
 
 In the literature review, I showed how various papers have employed different codes, reactors, reprocessing methods, and tracking of DNPs. I also discussed how a reason for employing both continuous and batchwise reprocessing could be to ensure the mass in the reactor remains fairly constant. In this chapter, I will discuss the methodology used for the Serpent2 MSBR model used to generate results, the different reprocessing methods, mass balancing, and delayed neutron precursors in this work.
-More specifically, I will describe in detail first two different approaches for batchwise reprocessing which have been implemented in SaltProc, the tool used in this work to handle batchwise reprocessing \cite{rykhlevskii_saltproc_2018}. I will then give a summary of the two approaches and provide estimates for the expected error and computational costs compared to continuous methods.
+More specifically, I will describe in detail two different approaches for batchwise reprocessing which have been implemented in SaltProc, the tool used in this work to handle batchwise reprocessing \cite{rykhlevskii_saltproc_2018}. I will then give a summary of the two approaches and provide estimates for the expected error and computational costs compared to continuous methods.
 After that, I will then discuss three different continuous reprocessing methods.
 I will discuss several approaches which can be implemented for one of these methods.
 Finally, I will provide information on the mass balancing and the effects of delayed neutrons on depletion results.
@@ -14,7 +14,7 @@ Finally, I will provide information on the mass balancing and the effects of del
 
 \section{Serpent MSBR Model}
 
-The results generated in this work come from the MSBR, particularly the model developed by Rykhlevskii \cite{rykhlevskii_advanced_2018}. The geometry of the model has remained unchanged, while the reprocessing has been overhauled using the continuous reprocessing functionality in Serpent2 which was previously undocumented. Previously, SaltProc's batchwise reprocessing was used, but the continuous reprocessing in Serpent2 is incorporated in this work.
+The results generated in this work come from the MSBR, particularly the model developed by Rykhlevskii \cite{rykhlevskii_advanced_2018}. The geometry of the model has remained unchanged, while the reprocessing has been overhauled using the continuous reprocessing functionality previously undocumented in Serpent2. %Previously, SaltProc's batchwise reprocessing was used, but the continuous reprocessing in Serpent2 is incorporated in this work.
 
 \subsection{Reprocessing Structure}
 \label{s:decay-tank}
@@ -24,7 +24,7 @@ There are two different reprocessing schemes developed in this work. Both scheme
 
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.7]{images/sp-match-repr-scheme.png}
+  \includegraphics[scale=0.15]{images/sp-match-repr-scheme.png}
   \caption{Simplified reprocessing scheme based on SaltProc.}
    \label{fig:spmatchrepr}
 \end{figure}
@@ -33,12 +33,12 @@ The second reprocessing scheme reflects the physical MSBR model, and instead use
 
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.7]{images/phys-repr-scheme.png}
+  \includegraphics[scale=0.15]{images/phys-repr-scheme.png}
   \caption{Simplified reprocessing scheme based on the phyiscal MSBR processes.}
    \label{fig:nonspmatchrepr}
 \end{figure}
 
-Overall, it can be anticipated that the two methods will be approximately equal at steady state, since at that point the assumption by Rykhlevskii that the uranium input is the same as the protactinium output should be valid. However, there are expected to be differences for the first several months of operation, as the half life of protactinium-233 is on the order of one month, and the initial decrease in fissile material will impact reactor performance. This means that the uranium feed will take some time before it is providing a steady source of fissile material to the core. This also means the reactor physics will be different, which is an important when considering the safety of the reactor.
+Overall, it can be anticipated that the two methods will be approximately equal at steady state, because at steady state the assumption by Rykhlevskii that the uranium input is the same as the protactinium output will be valid. However, there are expected to be differences for the first several months of operation, as the half life of protactinium-233 is on the order of one month, and the initial decrease in fissile material will impact reactor performance. Thus, the uranium feed will take some time before it is providing a steady source of fissile material to the core. Furthermore, the reactor physics will be different, which is important when considering the safety of the reactor.
 
 
 
@@ -57,7 +57,7 @@ These approaches are the bulk batchwise approach, used in version 0.1 of SaltPro
 %Of these different versions of SaltProc, they have slightly different methods in how the depletion data is stored as well as how reprocessing rates are calculated.
 %However, the two versions of interest are version 0.1 and 0.3, which use different batchwise reprocessing approaches.
 %These two different approaches are referred to here as the "bulk" approach and the "steady" approach.
-%which
+%which 
 %an accurate model of the MSBR, uses Serpent2 for transport and depletion calculations, and because it provides
 
 \subsection{Bulk Reprocessing Approach}
@@ -121,7 +121,10 @@ Figures \ref{fig:Th-feed-v3} and \ref{fig:U-feed-v3} show the refueling rate of 
 \subsection{Batch Approaches Summary}
 \label{s:batch-sum}
 
-To compare the different batchwise approaches, there are several key parameters to keep in mind. These include the approach used, which can be either bulk or steady for this work; the time step $\Delta t$, which is the simulated depletion time step used; and the cycle time $T_{cyc}$, which is inversely proportional to the rate at which a target is removed. For both steady and bulk, the step removal can then be calculated, which is the fraction of the target removed at each depletion time step. Additionally, for the steady, the fractional removal rate can be calculated. This is just the step removal in per second units. Comparisons of these values for various parameters can be seen in Table \ref{tab:batch_methods}.
+To compare the different batchwise approaches, there are several key parameters to keep in mind. These include the approach used, which can be either bulk or steady for this work; the time step $\Delta t$, which is the simulated depletion time step used; and the cycle time $T_{cyc}$, which is inversely proportional to the rate at which a target is removed. 
+The step removal for both steady and bulk can then be calculated, where the step removal is the fraction of the target removed at each depletion time step.
+%For both steady and bulk, the step removal can then be calculated, which is the fraction of the target removed at each depletion time step. 
+Additionally, for the steady, the fractional removal rate can be calculated. This is just the step removal in per second units. Comparisons of these values for various parameters can be seen in Table \ref{tab:batch_methods}.
 
 \begin{table}[H]
 \renewcommand{\arraystretch}{1.25}
@@ -146,8 +149,8 @@ To compare the different batchwise approaches, there are several key parameters 
         \begin{center}
 \footnotesize{$^{*}$ Bulk removal is 0 until the depletion step is equal to the cycle time, at which point it removes 100\%.}\\
         \end{center}
-
-Table \ref{tab:batch_methods} reflects the information shown in Figure \ref{fig:bulk_repr_cnst}, which shows the fractional removal rate at each depletion time step. The table shows how the bulk method will only remove 100\% at the cycle time, and otherwise removes nothing. Additionally, the bulk method will remove 100\% as soon as possible if the depletion step size, $\Delta t$, is larger than the cycle time, $T_{cyc}$.
+        
+Table \ref{tab:batch_methods} reflects the information shown in Figure \ref{fig:bulk_repr_cnst}, which shows the fractional removal rate at each depletion time step. The table shows how the bulk method will only remove 100\% at the cycle time, and otherwise removes nothing. Additionally, the bulk method will remove 100\% as soon as possible if the depletion step size, $\Delta t$, is larger than the cycle time, $T_{cyc}$. 
 
 The table also describes how the steady method fractional removal is constant up until the depletion step size becomes larger than the cycle time, at which point the removal at each step is 100\%, causing the steady method to then be equivalent to the bulk method. However, for shorter times, the steady method allows for a consistent fractional removal rate by adjusting the removal at each step.
 
@@ -162,17 +165,19 @@ The table also describes how the steady method fractional removal is constant up
 Figure \ref{fig:bulk_repr_cnst} shows an example fractional removal scheme for a fission product with a cycle time of 20 seconds. The bulk method simply extracts 100\% of the product every 20 seconds, no matter how small the depletion step size is. The steady method removes some fraction every depletion step, which allows a semi-continuous process as the depletion step size becomes smaller and smaller. This can be seen in how a 10 second depletion step results in 50\% removal every 10 seconds, whereas a 1 second step allows for 5\% removal per depletion step.
 
 
-% Add comparison of batch/steady for matrix of possible combinations.
+% Add comparison of batch/steady for matrix of possible combinations. 
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[scale=0.75]{images/batch-steady-identical-compare.png}
-  \caption{Plot showing how bulk and steady batchwise reprocessing are identical in the cases where the cycle time is shorter than or equal to the depletion step size.}
-   \label{fig:bulk_repr_comp}
-\end{figure}
+%\begin{figure}[H]
+%  \centering
+%  \includegraphics[scale=0.75]{images/batch-steady-identical-compare.png}
+%  \caption{Plot showing how bulk and steady batchwise reprocessing are identical in the cases %where the cycle time is shorter than or equal to the depletion step size.}
+%   \label{fig:bulk_repr_comp}
+%\end{figure}
 
-A useful piece of information to note is that if the cycle time is shorter than or equal to the depletion step size, then the steady and bulk batchwise methods will be identical to each other. This is demonstrated in Figure \ref{fig:bulk_repr_comp}, which shows a simple model case with 1 second depletion steps and 1 second cycle times for an imaginary isotope. For the MSBR simulation, this means that there will be no mass differences due to reprocessing in the noble metals, gasses, and protactinium while using a three day depletion time step, which is longer than or equal to the cycle time for each of those groups. % reprocessing will remain the same for either batchwise method employed.
-However, the longer cycle time groups such as the rare earths and volatile fluorides have cycle times which are 10-20 times longer than the depletion step size. These elements will have differences between both methods. As a result, the full reactor system will have elements with varying levels of error.
+A useful piece of information to note is that if the cycle time is shorter than or equal to the depletion step size, then the steady and bulk batchwise methods will be identical to each other.
+%This is demonstrated in Figure \ref{fig:bulk_repr_comp}, which shows a simple model case with 1 second depletion steps and 1 second cycle times for an imaginary isotope. 
+For the MSBR simulation, this means that there will be no mass differences due to reprocessing in the noble metals, gasses, and protactinium while using a three day depletion time step, which is longer than or equal to the cycle time for each of those groups. % reprocessing will remain the same for either batchwise method employed.
+However, the longer cycle time groups, such as the rare earths and volatile fluorides, have cycle times which are 10-20 times longer than the depletion step size. These elements will have differences between both methods. As a result, the full reactor system will have elements with varying levels of error.
 
 Figure \ref{fig:bulk_repr_diff} shows a simulation of this for a situation where an isotope is generated at a rate of 1 gram per second, and is simulated with some combination of cycle time and depletion step size where the depletion step size is smaller than the cycle time.
 
@@ -184,66 +189,68 @@ Figure \ref{fig:bulk_repr_diff} shows a simulation of this for a situation where
    \label{fig:bulk_repr_diff}
 \end{figure}
 
-One interesting aspect to note from this figure is that the steady method approaches a steady state value which is at the peak of the bulk method. This result can be confirmed by checking that the solutions for both the steady and bulk methods are valid. To check the solution, the 40 second cycle time and 20 second depletion step will be used.
+One interesting aspect to note from this figure is that the steady method approaches a steady state value which is at the peak of the bulk method. This result can be confirmed by checking that the solutions for both the steady and bulk methods are valid. To check the solution, the 40 second cycle time and 20 second depletion step will be used. 
 
-For the bulk method, after 100\% removal after the first cycle time, or 40 seconds, the mass then oscillates between 20 and 0 grams. This makes sense since 20 grams are generated over 20 seconds while every 40 seconds there is 100\% removal.
+For the bulk method, after 100\% removal following the first cycle time, or 40 seconds, the mass then oscillates between 20 and 0 grams. 
+This is consistent with the expected result, since 20 grams are generated over 20 seconds while every 40 seconds there is 100\% removal. 
 
-For the steady method, the initial mass of 1 gram gains 20 grams over 20 seconds, yielding 21 grams. However, the steady removal then requires removal of 50\%, previously discussed and shown in Figure \ref{fig:bulk_repr_cnst}. This 50\% removal then drops the mass to 10.5 grams. 20 more grams are added to this value and 50\% is removed again, continuing iteratively. This can then be re-written as an infinite sum in order to determine the steady state solution. The first three iterations are shown in Equations \eqref{eq:ss-mass-p1} and \eqref{eq:ss-mass-p2}, where the value of 20 is the mass added during each depletion step and the value of 0.5 is the fractional removal performed each depletion step.
+For the steady method, the initial mass of 1 gram gains 20 grams over 20 seconds, yielding 21 grams. However, the steady removal then requires removal of 50\%, previously discussed and shown in Figure \ref{fig:bulk_repr_cnst}. This 50\% removal then drops the mass to 10.5 grams. 20 more grams are added to this value and 50\% is removed again, continuing iteratively. This can then be re-written as an infinite sum in order to determine the steady state solution. The first three iterations are shown in Equations \eqref{eq:ss-mass-p1} and \eqref{eq:ss-mass-p2}, where the value of 20 is the mass added during each depletion step and the value of 0.5 is the fractional removal performed each depletion step. 
 %In the generic form, the $C$ term represents the gain per second, $\Delta t$ is the depletion step size, and $T_{cyc}$ is the cycle time.
 
-%\begin{equation} \hfill
+%\begin{equation} \hfill 
 %m_{n+1} = (m_n + C \Delta t) (1 - \frac{\Delta t}{T_{cyc}})
 %\hfill\label{eq:ss-mass-p5-steady-generic} \end{equation}
 
-\begin{equation} \hfill
+\begin{equation} \hfill 
 m_{ss} = \left( \left( \left(N_0+20 \right) \left(\frac{1}{2} \right)+20 \right)\left(\frac{1}{2} \right)+20 \right)\left(\frac{1}{2} \right) + ...
 \hfill\label{eq:ss-mass-p1} \end{equation}
 
-\begin{equation} \hfill
+\begin{equation} \hfill 
 m_{ss} = \frac{1}{2}^3 N_0 + \frac{1}{2}^3 (20) + \frac{1}{2}^2 (20) + \frac{1}{2} (20) + ...
 \hfill\label{eq:ss-mass-p2} \end{equation}
 
 Continuing this form infinitely yields Equation \eqref{eq:ss-mass-p3}, where the infinite sum yields 1, resulting in a net value of 20, the result of which is unaffected by the initial mass of the isotope and instead depends on the generation and reprocessing rates.
 
-\begin{equation} \hfill
-m_{ss} = 20 \sum_{n=1}^\infty \frac{1}{2}^n
+\begin{equation} \hfill 
+m_{ss} = 20 \sum_{n=1}^\infty \frac{1}{2}^n 
 \hfill\label{eq:ss-mass-p3} \end{equation}
 
 In order to generate a generic form for this equation, a short derivation is required, which is provided in Appendix A. From this derivation, the mass at the $n+1^{th}$ step is given by Equation \eqref{eq:nplusone-gen}.
 
-\begin{equation} \hfill
+\begin{equation} \hfill 
 m_{n+1} = \left[ \left(m_n + \frac{C}{\lambda - \lambda_r} \right)e^{-(\lambda - \lambda_r) \Delta t} + \frac{C}{\lambda - \lambda_r} \right] \left(1 - \Delta t \lambda_r \right),
 \hfill\label{eq:nplusone-gen} \end{equation}
 
-% Add generic form (x added per second, y removal rate)A more generic form for the case of a constant rate of change over each depletion step can be seen in Equation \eqref{eq:ss-mass-p4}.
-In this equation, $C$ represents the gain terms in the Bateman equation, $\Delta t$ represents the depletion step size, $\lambda$ represents the loss terms in the Bateman equation, and $\lambda_r$ represents the reprocessing constant. This equation assumes a constant $C$, $\lambda$, and $\lambda_r$, which is a reasonable assumption at steady state when the changes over time are negligible. This equation is used to generated the steady state equation as shown in Equations \eqref{eq:ss-mass-p4prev} through \eqref{eq:ss-mass-p4}.
+% Add generic form (x added per second, y removal rate)A more generic form for the case of a constant rate of change over each depletion step can be seen in Equation \eqref{eq:ss-mass-p4}. 
+In this equation, $C$ represents the gain terms in the Bateman equation, $\Delta t$ represents the depletion step size, $\lambda$ represents the loss terms in the Bateman equation, and $\lambda_r$ represents the reprocessing constant. This equation assumes a constant $C$, $\lambda$, and $\lambda_r$.
+This is a reasonable assumption at steady state when the changes over time are negligible. This equation is used to generated the steady state equation as shown in Equations \eqref{eq:ss-mass-p4prev} through \eqref{eq:ss-mass-p4}.
 
-%\begin{equation} \hfill
-%m_{ss} = C \Delta t \sum_{n=1}^\infty \left( 1 - \frac{\Delta t}{T_{cyc}} \right)^n
+%\begin{equation} \hfill 
+%m_{ss} = C \Delta t \sum_{n=1}^\infty \left( 1 - \frac{\Delta t}{T_{cyc}} \right)^n 
 %\hfill\label{eq:ss-mass-p4prev} \end{equation}
 
 The $n+1^{th}$ step can be written in the form of a sum over $n$ terms, which allows for the steady state mass to be written as an infinite sum
 
-\begin{equation} \hfill
+\begin{equation} \hfill 
 m_{ss} =  \frac{C}{\lambda - \lambda_r} \left(e^{(\lambda - \lambda_r) \Delta t} - 1 \right) \sum_{n=1}^{\infty} \left( \left(1 - \lambda_r \Delta t \right) e^{-(\lambda - \lambda_r) \Delta t} \right)^n.
 \hfill\label{eq:ss-mass-p4prev} \end{equation}
 
 This infinite sum is of the more general form
 
-\begin{equation} \hfill
+\begin{equation} \hfill 
 \sum_{n=1}^\infty \left( x \right)^n = \frac{x}{1-x} \ni |x| < 1,
 \hfill\label{eq:ss-mass-p4next} \end{equation}
 
 which has a known converged solution and associated constraint to use that converged solution. I can then rewrite the infinite sum as
 
-\begin{equation} \hfill
+\begin{equation} \hfill 
 m_{ss} =  \frac{C (e^{(\lambda - \lambda_r) \Delta t} - 1)}{\lambda - \lambda_r}  \left( \frac{\eta}{1 - \eta} \right) \ni \left|\eta \right| < 1,
 %m_{ss} =  C \Delta t \left( \frac{T_{cyc}}{\Delta t} - 1 \right) \ni 0 < \frac{\Delta t}{T_{cyc}} < 2
 \hfill\label{eq:ss-mass-p4nextprev} \end{equation}
 
 where
 
-\begin{equation} \hfill
+\begin{equation} \hfill 
 \eta = (1 - \lambda_r \Delta t) e^{-(\lambda - \lambda_r) \Delta t}.
 \hfill\label{eq:ss-mass-p4next-simple} \end{equation}
 
@@ -251,7 +258,7 @@ In these equations, $C$ still represents the gain terms in the Bateman equation,
 
 The constraint listed in Equation \eqref{eq:ss-mass-p4nextprev} that $\left|\eta \right| < 1$ shows when the equation no longer holds. However, this constraint only shows when the infinite series becomes divergent. The more physical constraint, $0 < \lambda_r \Delta t < 1$ is given in Equation \eqref{eq:ss-mass-p4}, which shows the completed form of the steady state mass. If the depletion step size, $\Delta t$, is equal to zero, then the simulation will never end, as no progress is made. Thus, the concept of steady state does not apply. For any depletion step sizes which are greater than the cycle time, the steady state mass will always be zero, as negative masses are non-physical.
 
-\begin{equation} \hfill
+\begin{equation} \hfill 
 m_{ss} = \frac{C (e^{(\lambda - \lambda_r) \Delta t} - 1)}{\lambda - \lambda_r}  \left( \frac{\eta}{1 - \eta} \right) \ni 0 < \lambda_r \Delta t < 1
 %m_{ss} =  C (T_{cyc} - \Delta t) \ni 0 < \frac{\Delta t}{T_{cyc}} \leq 1
 \hfill\label{eq:ss-mass-p4} \end{equation}
@@ -260,21 +267,21 @@ m_{ss} = \frac{C (e^{(\lambda - \lambda_r) \Delta t} - 1)}{\lambda - \lambda_r} 
 
 Overall, this shows that the steady and bulk batchwise methods have some similarities, but for elements with longer cycle times, the bulk method will experience oscillations whereas the steady method will level off smoothly. Additionally, the average value of the steady method will be higher than the oscillating bulk method. Finally, if I take the limit of Equation \eqref{eq:ss-mass-p4} as the time step approaches zero, Equation \eqref{eq:ss-mass-limit} is generated.
 
-\begin{equation} \hfill
+\begin{equation} \hfill 
 \lim_{\Delta t \to 0} m_{ss} = \frac{C}{\lambda}
 %m_{ss} =  C (T_{cyc} - \Delta t) \ni 0 < \frac{\Delta t}{T_{cyc}} \leq 1
 \hfill\label{eq:ss-mass-limit} \end{equation}
 
 This is the same steady state mass as generated from a continuous reprocessing method with the same gain, loss, and reprocessing terms in the Bateman equation.
 
-\subsubsection{Comparison with Continuous Reprocessing}
+\subsection{Comparison with Continuous Reprocessing}
 \label{s:batch-cont-compare}
 
-\paragraph*{Error Estimation}
+\subsubsection{Error Estimation}
 
 The difference between the bulk and steady batchwise reprocessing methods has been demonstrated, though how these methods compare to the continuous reprocessing methods has not been shown. For a simple example comparison, the steady batchwise method will be compared against the direct linear continuous method, which gives the relationship shown in Equation \eqref{eq:ss-mass-p6}. The derivation for this equation can be seen in Section \ref{s:DL}.
 
-\begin{equation} \hfill
+\begin{equation} \hfill 
 \lambda_r = \frac{1}{T_{cyc}}
 \hfill\label{eq:ss-mass-p6} \end{equation}
 
@@ -283,18 +290,18 @@ This comparison will assume there is some isotope which is generated at a consta
 
 The relevant continuous method equations are given in Equations \eqref{eq:ss-mass-p5} and \eqref{eq:ss-mass-p7}, where the variables are the same as those discussed in Equation \eqref{eq:ss-mass-p4}. Equation \eqref{eq:ss-mass-p5} shows the generic differential equation, while Equation \eqref{eq:ss-mass-p7} shows the mass as a function of time.
 
-\begin{equation} \hfill
+\begin{equation} \hfill 
 \frac{dm}{dt} = C - \lambda m
 \hfill\label{eq:ss-mass-p5} \end{equation}
 
 
-\begin{equation} \hfill
+\begin{equation} \hfill 
 m(t) = \left(m_0 - \frac{C}{\lambda} \right) e^{-\lambda t} + \frac{C}{\lambda}
 \hfill\label{eq:ss-mass-p7} \end{equation}
 
 Equation \eqref{eq:ss-mass-batch-added} shows the equation for the steady batchwise method mass at the $n+1^{th}$ step. This equation is dependent upon the time step, so several time steps will need to be included in order to properly compare the steady batchwise and direct linear continuous methods.
 
-\begin{equation} \hfill
+\begin{equation} \hfill 
 m_{n+1} = (C \Delta t + m_n) (1 - \lambda_r \Delta t)
 \hfill\label{eq:ss-mass-batch-added} \end{equation}
 
@@ -307,37 +314,37 @@ The previous example is continued here, using a constant rate of 1, an initial c
    \label{fig:steady_cont_repr_diff}
 \end{figure}
 
-Overall, this figure shows that there are going to be differences between the batchwise and continuous methods, even with a time step which approaches zero. This is due to the differences in the slopes, which can be seen when comparing the continuous and steady for a small time step of one second. However, it can also be seen that the differences at large time values is smaller for shorter time steps and larger for longer time steps when comparing the steady batchwise and continuous methods. From this observation, I can provide a derivation for the expected difference between the methods at steady state, with some simplifying assumptions.
+Overall, this figure shows that there are going to be differences between the batchwise and continuous methods, even with a time step which approaches zero. This is due to the differences in the slopes, which can be seen when comparing the continuous and steady for a small time step of one second. However, it can also be seen that the differences at large time values is smaller for shorter time steps and larger for longer time steps when comparing the steady batchwise and continuous methods. From this observation, I provide a derivation for the expected difference between the methods at steady state, with some simplifying assumptions.
 %It can be seen in this figure that the direct linear continuous method will result in a steady state result which is different from the steady batchwise method unless the depletion step size is infinitely small.
 
-\begin{equation} \hfill
+\begin{equation} \hfill 
 m_{ss} = \frac{C}{\lambda}
 \hfill\label{eq:ss-mass-cont} \end{equation}
 
-Equation \eqref{eq:ss-mass-cont} shows the steady state mass which will appear when using continuous reprocessing when there is a constant growth term. This can be set equal to the steady batch steady state term in order to solve for the depletion time step needed to match the result from continuous reprocessing at steady state.
+Equation \eqref{eq:ss-mass-cont} shows the steady state mass which will appear when using continuous reprocessing when there is a constant growth term. This can be set equal to the steady batch steady state term in order to solve for the depletion time step needed to match the result from continuous reprocessing at steady state. 
 The steady state mass was previously calculated for a time step approaching zero in Equation \eqref{eq:ss-mass-limit}.
-In that equation, I showed that the continuous steady state mass is equal to the steady batchwise steady state mass when the time step approaches zero.
+In that equation, I showed that the steady state mass calculated using a continuous reprocessing method is equal to the steady state mass cakculated using a steady batchwise reprocessing method when the time step approaches zero.
 %The result of this can be seen in Equation \eqref{eq:ss-mass-solve-3}, which reinforces what can be seen in Figure \ref{fig:steady_cont_repr_diff}.
 
-%\begin{equation} \hfill
+%\begin{equation} \hfill 
 %\frac{C}{\lambda} = \lim_{\Delta t \to 0} \left( \frac{C (e^{(\lambda - \lambda_r) \Delta t} %- 1)}{\lambda - \lambda_r}  \left( \frac{\eta}{1 - \eta} \right) \right)
 %\hfill\label{eq:ss-mass-solve-3} \end{equation}
 
 Correspondingly, this means that the steady state error associated with implementing the steady batchwise method to approximate a continuous reprocessing scheme is proportional to the magnitude of the depletion step size used. Specifically, as shown in Equations \eqref{eq:ss-err-1} and \eqref{eq:ss-err-4}, the error at steady state due to reprocessing directly scales based on the ratio of the depletion time step and the cycle time. In this work, I treat the error as the normalized difference of the batchwise mass from the continuous mass.
 
-\begin{equation} \hfill
+\begin{equation} \hfill 
 |E| = \frac{|m_{ss}^{batch} - m_{ss}^{continuous}|}{m_{ss}^{continuous}}
 \hfill\label{eq:ss-err-1} \end{equation}
 
-%\begin{equation} \hfill
+%\begin{equation} \hfill 
 %|E| = \frac{|C(T_{cyc} - \Delta t) - CT_{cyc}|}{CT_{cyc}}
 %\hfill\label{eq:ss-err-2} \end{equation}
 
-%\begin{equation} \hfill
+%\begin{equation} \hfill 
 %|E| = \frac{|T_{cyc} - \Delta t - T_{cyc}|}{T_{cyc}}
 %\hfill\label{eq:ss-err-3} \end{equation}
 
-\begin{equation} \hfill
+\begin{equation} \hfill 
 |E| = \frac{\lambda}{C} \left| \frac{C}{\lambda}  - \frac{\lambda (e^{(\lambda - \lambda_r) \Delta t} - 1)}{\lambda - \lambda_r}  \left( \frac{(1 - \lambda_r \Delta t) e^{-(\lambda - \lambda_r) \Delta t}}{1 - (1 - \lambda_r \Delta t) e^{-(\lambda - \lambda_r) \Delta t}} \right) \right|
 %|E| = \frac{\Delta t}{T_{cyc}} \ni 0 < \frac{\Delta t}{T_{cyc}} \leq 1
 \hfill\label{eq:ss-err-4} \end{equation}
@@ -346,52 +353,52 @@ An exmaple of this relative error can be seen in Figure \ref{fig:steady_cont_rep
 
 This method also fits well for complicated interactions which are present in the molten salt reactor model.
 As previosuly discussed, for this equation to fit, there are several assumptions which must be made, such as a constant gain and loss terms.
-For this simplified model to fit the MSBR, I assume there is a constant amount of fissile mass in the system, in the case of the MSBR this is primarily uranium-233, $m_{u233}$; I assume the fission yield, $\gamma$, does not change significantly due to spectral changes over time; and
-I assume a constant neutron flux, $\phi$.
-The equations can then be expanded using the variables shown in Equation \eqref{eq:ss-mass-p5-update} and \eqref{eq:ss-mass-p5-steady-update}. The terms in these equations come from the Bateman equation.
+%For this simplified model to fit the MSBR, I make the following assumptions: there is a constant amount of fissile mass in the system (in the case of the MSBR, this is primarily uranium-233, $m_{u233}$), I assume the fission yield ($\gamma$) does not change significantly due to spectral changes over time, and I assume a constant neutron flux ($\phi$).
+For this simplified model to fit the MSBR, I make the following assumptions: there is a constant amount of fissile mass in the system, the fission yield does not change significantly due to spectral changes over time, and there is a constant neutron flux.
+The equations used to generate the error, particularly Equation \eqref{eq:ss-err-4}, can then be expanded using the variables shown in Equation \eqref{eq:ss-mass-p5-update} and \eqref{eq:ss-mass-p5-steady-update}. The terms in these equations come from the Bateman equation, where $C_i$ is the source term for nuclide $i$, $\phi$ is the neutron flux, $\sigma^{U233}_f$ is the fission cross section of uranium-233, $\gamma_i$ is the fission yield, $N$ is the concentration, $\lambda_{j \rightarrow i, d }$ is the decay constant of nuclide $j$ to nuclide $i$, $\sigma_{j \rightarrow i}$ is the cross section of nuclide $j$ to $i$, $\lambda_i$ is the loss term for nuclide $i$, $\lambda_{i, d}$ is the decay constant for nuclide $i$, $\lambda_{i, r}$ is the reprocessing constant for nuclide $i$, and $\sigma_i$ is the capture cross section for nuclide $i$.
 
-\begin{equation} \hfill
-C_i = \phi \sigma_{u233} \gamma N_{u233} + \sum_j N_j \left( \lambda_{j \rightarrow i }  + \sigma_{j \rightarrow i} \phi \right)
+\begin{equation} \hfill 
+C_i = \phi \sigma^{U233}_f \gamma_i N_{U233} + \sum_j N_j \left( \lambda_{j \rightarrow i, d }  + \sigma_{j \rightarrow i} \phi \right)
 %\frac{dm}{dt} = \phi \sigma_{u233} \gamma m_{u233} - \left( \lambda_{r} + \lambda_d + \phi \sigma \right) m
 \hfill\label{eq:ss-mass-p5-update} \end{equation}
 
-\begin{equation} \hfill
+\begin{equation} \hfill 
 \lambda_i = N_i \left( \lambda_{i, d} + \lambda_{i, r} + \sigma_i \phi \right)
 %m_{n+1} = (m_n + \phi \sigma_{u233} \gamma m_{u233} \Delta t) (1 - \Delta t \left(  \lambda_{r} + \lambda_d + \phi \sigma \right) )
 \hfill\label{eq:ss-mass-p5-steady-update} \end{equation}
 
 In these equations, the reprocessing constant, $\lambda_r$, is rewritten from its previous form of $\lambda$ because the decay constant, $\lambda_d$, is now present.
-Due to the simplifying assumptions made, which are valid over a short net depletion time or at steady state, these equations is of the same form as the simple equation presented in the example above.
+Due to the simplifying assumptions made, which are valid over a short net depletion time or at steady state, these equations are of the same form as the simple equation presented in the example above.
 Thus, by replacing the $C$ and $\lambda$ terms from the simple model for error shown in Equation \eqref{eq:ss-err-4}, the model provides an estimate of error for the many isotopes in the reactor simulation.
 Realistically, the assumptions made here will not all hold, but this is still a useful tool to gain a low-fidelity approximation for the level of error which can be expected by approximating continuous online reprocessing using a steady batchwise reprocessing method.
-%This means that the error equation generated in Equation \eqref{eq:ss-err-4} remains reasonable for many fission product isotopes generated in the reactor at steady state.
+%This means that the error equation generated in Equation \eqref{eq:ss-err-4} remains reasonable for many fission product isotopes generated in the reactor at steady state. 
 %but for clarity could be rewritten in the form shown in Equation \eqref{eq:ss-err-4-final}.
 
-%\begin{equation} \hfill
+%\begin{equation} \hfill 
 %|E| = \Delta t \lambda \ni 0 < \Delta t \lambda \leq 1
 %\hfill\label{eq:ss-err-4-final} \end{equation}
 
 %If the cycle time, instead of removing 100\%, removes some fraction $f$, then the equation can be modified using Equation \eqref{eq:batchwise_rem_eff-new} in order to get Equation \eqref{eq:ss-err-4-final-new}.
 
-%\begin{equation} \hfill
+%\begin{equation} \hfill 
 %\gamma = f \frac{\Delta t}{T_{cyc}}
 %\hfill\label{eq:batchwise_rem_eff-new} \end{equation}
 
-%\begin{equation} \hfill
+%\begin{equation} \hfill 
 %|E| = f \Delta t \lambda \ni 0 < \Delta t \lambda \leq 1
 %\hfill\label{eq:ss-err-4-final-new} \end{equation}
 
 %Checking the limits, if the removal fraction $f$ is zero, then the continuous and batchwise methods should both remove nothing and therefore be equivalent. Additionally, when removing smaller fractions, it is expected that the amount of error possible for the batchwise method should be reduced, which also fits with the equation.
 
-\paragraph*{Computational Cost}
+\subsubsection{Computational Cost}
 
-One of the weaknesses of batchwise methods is the necessarily higher computational cost compared to continuous methods. The first reason for this is because batchwise methods which approximate a continuous process have reprocessing based error which scales with depletion step size, as shown in Equation \eqref{eq:ss-err-4}. This means that smaller depletion step sizes are required for the same error as a continuous method.
+One of the weaknesses of batchwise methods is the necessarily higher computational cost compared to continuous methods. The first reason for this is because batchwise methods which approximate a continuous process have reprocessing based error which scales with depletion step size, as shown in Equation \eqref{eq:ss-err-4}. This means that smaller depletion step sizes are required for a batchwise method to achieve the same error as a continuous method. 
 
-The second reason is because of the "double-running" of simulations which is required when using a batchwise method in Serpent2. When running a batchwise depletion program, the first time step is run and the new material compositions are generated, providing 2 complete simulation results at times 0 and $\Delta t$. However, these generated materials do not have reprocessing factored in, so the external reprocessing script, such as SaltProc, then performs the reprocessing on the materials. The updated materials are fed back in, and the simulation is run again. This results in two new simulation results at $\Delta t$ and $2 \Delta t$.
+The second reason is because of the "double-running" of simulations which is required when using a batchwise method in Serpent2. When running a batchwise depletion program, the first time step is run and the new material compositions are generated, providing 2 complete simulation results at times 0 and $\Delta t$. However, these generated materials do not have reprocessing factored in, so the external reprocessing script, such as SaltProc, then performs the reprocessing on the materials. The updated materials are fed back in, and the simulation is run again. This results in two new simulation results at $\Delta t$ and $2 \Delta t$. 
 
 Because of the necessity of regenerating data based on the updated material properties after the external depletion is performed, each time step requires two simulations to be performed, essentially doubling the computational cost. With a continuous method, the materials are updated during the depletion step, which means the generated data already uses the data of reprocessing materials. This eliminates any need for double running, allowing continuous methods to be run for much less computational cost.
 
-However, there are still motivations for using batchwise reprocessing methods. If a reactor includes batchwise reprocessing in the reprocessing scheme, then using a batchwise reprocessing method is necessary to properly capture that physical phenomena. Additionally, with clever coding, the overhead from using batchwise reprocessing methods can be reduced, which could eliminate the need to "double-run" time steps in the simulation. Batchwise might be particularly attractive in the case where fine depletion time steps are used to more fully capture spectral changes, in which case using batchwise reprocessing methods will not adversely affect run times in a significant way if double-runs are avoided. Using batchwise reprocessing methods also allows for simpler customization of mass balancing, which can be treated with an overflow volume, adjustments to refuel rates, or any other modification to the compositions.
+However, there are still motivations for using batchwise reprocessing methods. If a reactor includes batchwise reprocessing in the reprocessing scheme, then using a batchwise reprocessing method is necessary to properly capture that physical phenomena. Additionally, with clever coding, the overhead from using batchwise reprocessing methods can be reduced, which could eliminate the need to "double-run" time steps in the simulation. Batchwise might be particularly attractive in the case where fine depletion time steps are used to more fully capture spectral changes, in which case using batchwise reprocessing methods will not adversely affect run times in a significant way if double-runs are avoided. Using batchwise reprocessing methods also allows for simpler customization of mass balancing, which can be treated with an overflow volume, adjustments to refuel rates, or any other modification to the compositions. 
 
 \section{Continuous Reprocessing in the MSBR}
 
@@ -417,7 +424,7 @@ Additionally, there are "SaltProc" versions of each approach implemented as well
 
 The reason these approaches are implemented is because molten salt reactor reprocessing schemes provide reprocessing data in terms of cycle times. The cycle time is the amount of time it takes for a given element to be removed from the system.
 In the next few equations, I illustrate why we cannot solve these directly with the Bateman equations. This is why I make use of different approaches which approximate the removal of an element based on this definition of the cycle time.
-%This cannot be directly solved using the Bateman equation, as shown in Equations \eqref{eq:decay_1} through \eqref{eq:decay_3} and \eqref{eq:decay_4} through \eqref{eq:decay_7}.
+%This cannot be directly solved using the Bateman equation, as shown in Equations \eqref{eq:decay_1} through \eqref{eq:decay_3} and \eqref{eq:decay_4} through \eqref{eq:decay_7}. 
 
 Firstly, Equation \eqref{eq:decay_1} shows the Bateman equation for a simple nuclide with only reprocessing removal.
 
@@ -462,12 +469,12 @@ This equation can be simplified further to the form shown in Equation \eqref{eq:
 \hfill\label{eq:decay_7} \end{equation}
 
 
- These equations show that the only real solution to a steady accumulation and continuous removal is with a reprocessing constant of 0. However, there are approaches which can be used to approximate this definition of cycle time while still moving closer to the physical chemical processes. In reality, the continuous online reprocessing follows an exponential decay, becoming less efficient as the elemental concentration decreases. Thus, although the definition of the cycle time is being approximated using these approaches, the physical phenomena is being modeled accurately.
+ These equations show that the only real solution to a steady accumulation and continuous removal is with a reprocessing constant of 0. However, there are approaches which can be used to approximate this definition of cycle time while still moving closer to the physical chemical processes. In reality, the continuous online reprocessing follows an exponential decay, becoming less efficient as the elemental concentration decreases. Although the definition of the cycle time is being approximated using these approaches, the physical phenomena is being modeled accurately.
 
 \subsubsection{Cycle Time Decay}
 \label{s:CTD}
 
-The cycle time decay approach is a method which makes use of the mathematical form of the decay reprocessing method. A similar method of treating removal periods for reprocessing can be seen in Brovchenko et al \cite{brovchenko_neutronic_2019}. Because it adds a "decay-like" term to the Bateman equation, this approach takes the cycle time for the target, cuts it in half, and then treats that value as the reprocessing half-life for that target, as shown in  Equations \eqref{eq:ctd_1} and \eqref{eq:ctd_2}.
+The cycle time decay approach is a method which makes use of the mathematical form of the decay reprocessing method. A similar method of treating removal periods for reprocessing can be seen in Brovchenko et al. \cite{brovchenko_neutronic_2019}. Because it adds a "decay-like" term to the Bateman equation, this approach takes the cycle time for the target, cuts it in half, and then treats that value as the reprocessing half-life for that target, as shown in  Equations \eqref{eq:ctd_1} and \eqref{eq:ctd_2}.
 
 Equation \eqref{eq:ctd_1} shows how the reprocessing half-life term is created from the cycle time.
 
@@ -491,7 +498,7 @@ Equation \eqref{eq:ctd_2} takes this reprocessing half life value and creates a 
 %\end{figure}
 
 %It can be seen in this figure that this approach is accurate in being close to the cycle time, though this accuracy is limited to above approximately 40\% of the atoms. Because fission products are continuously generated though, it is expected to be within the more accurate regions.
-%Figure \ref{fig:ctd_examples} shows how the cycle time decay approach fares when accumulation of fission products is incorporated into the problem.
+%Figure \ref{fig:ctd_examples} shows how the cycle time decay approach fares when accumulation of fission products is incorporated into the problem. 
 
 %\begin{figure}[H]
 %  \centering
@@ -540,17 +547,17 @@ After solving, a unit time value is plugged in. After a unit time, the amount of
 N(t = 1) = (1-f) N_{0}
 \hfill\label{eq:nat_log_2} \end{equation}
 
-After plugging in the concentration equation from Equation \eqref{eq:nat_log_1_half} into Equation \eqref{eq:nat_log_2}, Equation \eqref{eq:nat_log_2_5} is generated.
+After plugging in the concentration equation from Equation \eqref{eq:nat_log_1_half} into Equation \eqref{eq:nat_log_2}, Equation \eqref{eq:nat_log_3} is generated.
 
 %\begin{equation} \hfill
 %(1-f) N_{0} = N_{0} e^{-\lambda_r (1)}
 %\hfill\label{eq:nat_log_2_1} \end{equation}
 
-\begin{equation} \hfill
--ln(1-f)  = \lambda_r
-\hfill\label{eq:nat_log_2_5} \end{equation}
+%\begin{equation} \hfill
+%-ln(1-f)  = \lambda_r
+%\hfill\label{eq:nat_log_2_5} \end{equation}
 
-Finally, the reprocessing constant is isolated, resulting in Equation \eqref{eq:nat_log_3}.
+%Finally, the reprocessing constant is isolated, resulting in Equation \eqref{eq:nat_log_3}.
 
 \begin{equation} \hfill
 \lambda_r = ln\left( \frac{1}{1-f} \right)
@@ -595,7 +602,7 @@ This value is then converted to a reprocessing constant by plugging it into the 
 
 \subsubsection{SaltProc Cycle Rate}
 
-The SaltProc cycle rate approach is the same as the cycle rate approach, but takes into account the limiting nature of the 3 day batchwise reprocessing step used by SaltProc. For example, a 6 day cycle time target would be modeled the same using the SaltProc cycle rate approach as the standard cycle rate approach. However, anything shorter than 3 days would be modeled differently, since that is the batchwise reprocessing step inocorporated by SaltProc for modeling the MSBR. For example, a 30 second cycle time would be analyzed instead as a 3 day cycle time, since SaltProc can only remove 100\% of material after a minimum of 3 days. This means the inverse would be 0.333 days$^{-1}$, or 3.858E-4 $s^{-1}$. Converting to a reprocessing constant gives a value of 3.858E-6 $s^{-1}$. This is the reprocessing constant for any cycle time which is less than or equal to three days. Additionally, the decay constant is multiplied by the fractional efficiency of the removal used by SaltProc. In most cases the value is 1, but it is roughly 0.91 for xenon and krypton in order to align with Rykhlevskii's results \cite{rykhlevskii_fuel_2020}.
+The SaltProc cycle rate approach is the same as the cycle rate approach, but takes into account the limiting nature of the 3 day batchwise reprocessing step used by SaltProc. For example, a 6 day cycle time target would be modeled the same using the SaltProc cycle rate approach as the standard cycle rate approach. However, anything shorter than 3 days would be modeled differently, since that is the batchwise reprocessing step incorporated by SaltProc for modeling the MSBR. For example, a 30 second cycle time would be analyzed instead as a 3 day cycle time, since SaltProc can only remove 100\% of material after a minimum of 3 days. This means the inverse would be 0.333 $d^{-1}$, or 3.858E-4 $s^{-1}$. Converting to a reprocessing constant gives a value of 3.858E-6 $s^{-1}$. This is the reprocessing constant for any cycle time which is less than or equal to three days. Additionally, the decay constant is multiplied by the fractional efficiency of the removal used by SaltProc. In most cases the value is 1, but it is roughly 0.91 for xenon and krypton in order to align with Rykhlevskii's results \cite{rykhlevskii_fuel_2020}.
 
 \subsubsection{Direct Linear Approach}
 \label{s:DL}
@@ -696,7 +703,7 @@ The differences between the cycle rate and direct linear reprocessing constants 
 
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.55]{images/dl_cr_asymptote.png}
+  \includegraphics[scale=0.7]{images/dl_cr_asymptote.png}
   \caption{An illustrated comparison of the direct linear and cycle rate reprocessing constants for different cycle times.}
    \label{fig:dl_cr_asymptotic}
 \end{figure}
@@ -772,7 +779,7 @@ The values shown in Table \ref{tab:repr_decay_view_full} for the SaltProc-type c
 
 The Step reprocessing method implemented in Serpent2 is mathematically very similar to the Decay model, but instead of updating continuously in time, it instead is updated during new depletion steps. In this manner, it could be considered a mix between the Constant method and the Decay method. This is because over a single depletion step, it is a constant added or subtracted from the Bateman equation, while over many depletion steps, it follows the same exponential decay form of the Decay method.
 
-This particular method is not useful for extracting fission products, and is not needed for constant feed rates since that can be modeled using the Decay method. This method could be useful for inducing a step drop in feed rate, though this would require running only a single depletion step until the drop occurred. Additionally, this drop could be simulated by running the Decay method and reducing the reprocessing constant. This would allow for flexibility in the distribution of depletion steps as well without having to worry about changing the behaviour of the reprocessing functionality.
+This particular method is not useful for extracting fission products, and is not needed for constant feed rates since that can be modeled using the Decay method. This method could be useful for inducing a step drop in feed rate, though this would require running only a single depletion step until the drop occurred. Additionally, this drop could be simulated by running the Decay method and reducing the reprocessing constant. This would allow for flexibility in the distribution of depletion steps as well without having to worry about changing the behaviour of the reprocessing functionality. 
 
 Another potential issue with the Step method is that the depletion step can last long enough that the constant mass removal causes the mass to go negative. However, Serpent2 will cease running if this occurs. The Decay method does not mathematically allow for negative mass, the Constant method does not conserve mass, and the Step method stops running once there is negative mass.
 
@@ -785,11 +792,11 @@ One of the useful features of batchwise reprocessing is that the net mass of the
 
 In Serpent2, an increase in mass does not affect volume, but instead increases the density of that isotope in the material accordingly. This affects macroscopic cross section calculations, and can lead to variation in results if not accounted for, since in reality volumetric expansion could be assumed. Though there are several methods to handle mass balancing with a batch method, it not currently continuously possible in Serpent2.
 
-In order to balance the mass in Serpent2 continuously, one approach could be to iteratively perform depletion calculations while updating feed rates until a balanced mass is found while also minimizing some other parameter, such as net mass of material added. However, the current reprocessing options available in Serpent2 only allows for pseudo-constant and decaying feed rates over the depletion step. With those two feed types available, it is not possible to have a constant mass balance.
+In order to balance the mass in Serpent2 continuously, one approach could be to iteratively perform depletion calculations while updating feed rates until a balanced mass is found while also minimizing some other parameter, such as net mass of material added. However, the current reprocessing options available in Serpent2 only allow for pseudo-constant and decaying feed rates over the depletion step. With those two feed types available, it is not possible to have a constant mass balance.
 
-It is possible to have the masses at the end of each depletion step remain constant, but this does handle mass fluctuations during depletion. It does, however, solve the issue of the density variation causing a difference in cross sections.
+It is possible to have the masses at the end of each depletion step remain constant, but this does not handle mass fluctuations during depletion. It does, however, solve the issue of the density variation causing a difference in cross sections.
 
-Overall, if the net mass difference is sufficiently small, it does not have to be considered since the results would not be significantly impacted. To check this for the MSBR, I will use an illustrative example. To determine the maximum possible increase in density, the mass loss due to fission and reprocessing is neglected, and only mass addition from the thorium feed rate is considered. The uranium feed is not added because it is equivalent to the protactinium removal, so it would have a negligible impact on net mass.
+Overall, if the net mass difference is sufficiently small, it does not have to be considered since the results would not be significantly impacted. To check this for the MSBR, I will use an illustrative example. To determine the maximum possible increase in density, the mass loss due to fission and reprocessing is neglected, and only mass addition from the thorium feed rate is considered. The uranium feed is not added because it is equivalent to the protactinium removal, so it would have a negligible impact on net mass. 
 
 \begin{equation} \hfill
 \Delta m = \Dot{m}_{feed} \Delta t \approx (2.5)(6000) = 15,000 kg
@@ -798,7 +805,7 @@ Overall, if the net mass difference is sufficiently small, it does not have to b
 It can be seen in Equation \eqref{eq:m_gain} that the net mass gain for an average feed rate of 2.5 kilograms per day over 6000 days is 15,000 kg \cite{rykhlevskii_fuel_2020, betzler_molten_2017} while operating at nominal power of 2250 MW \cite{robertson_conceptual_1971}. This does seem to be a very large value, but the importance of the mass in the depletion calculation is primarily in how it affects cross sections, which means that the impact on the overall thorium density is important. The thorium density is 1.46 grams per cubic centimeter, and the net volume is approximately 48.71 cubic meters. The density with the added mass is calculated using Equation \eqref{eq:new_rho}.
 
 \begin{equation} \hfill
-\rho_f = \frac{m_0 + \Delta m}{V} = \frac{(4.871E7 \left[cm^3 \right])(1.45919E\minus3 \left[ \frac{kg}{cm^3} \right]) + (15,000 \left[ kg \right])}{4.871E7 \left[ cm^3 \right]}
+\rho_f = \frac{m_0 + \Delta m}{V} = \frac{(4.871E7 \left[cm^3 \right])(1.45919E\minus3 \left[ \frac{kg}{cm^3} \right]) + (15,000 \left[ kg \right])}{4.871E7 \left[ cm^3 \right]} 
 \hfill\label{eq:new_rho} \end{equation}
 
 The final density comes out to be 1.767 grams per cubic centimeter, which is a percent difference of ~21\%. Although this is an upper bound on the mass difference, a 21\% difference in the expected cross section would result in significant error in the results. Therefore, since it is possible for the mass balancing to have an impact, it should be investigated to ensure the mass balancing is not impacting the results in any unexpected manner.
@@ -822,11 +829,32 @@ The final density comes out to be 1.767 grams per cubic centimeter, which is a p
 
 Delayed neutrons have a softer energy spectrum and drift along with the movement of the fuel salt in a fluid fueled molten salt reactor. This means that the delayed neutron precursors, of which some fraction leave the core and some move to less neutron important regions, have the potential to alter the depletion results of the MSBR model.
 
-However, it has been shown by Zhou et al that for the MSBR, the delayed neutron precursor drift has a negligible impact on depletion results \cite{zhou_fuel_2018}. Although Zhou et al has shown this, it is still worth considering the maximum possible effect delayed neutron precursors could have on depletion results. In order to determine this, the Serpent2 functionality of disabling delayed neutrons is employed \cite{leppanen_serpent_2015}. Using this method, two different models are generated of the MSBR. The first is one in which the delayed neutron precursors are evenly distributed within the core, which is the model implemented by SaltProc and this work \cite{rykhlevskii_modeling_2019}. The second model is one in which delayed neutrons no longer exist. This is beyond the greatest effects the delayed neutron precursor drift could have on depletion, so the absolute maximum effect of delayed neutron precursors on depletion results can be determined.
+However, it has been shown by Zhou et al. that for the MSBR, the delayed neutron precursor drift has a negligible impact on depletion results \cite{zhou_fuel_2018}. Although Zhou et al. have shown this, it is still worth considering the maximum possible effect delayed neutron precursors could have on depletion results. In order to determine this, the Serpent2 functionality of disabling delayed neutrons is employed \cite{leppanen_serpent_2015}. Using this method, two different models are generated of the MSBR. The first is one in which the delayed neutron precursors are evenly distributed within the core, which is the model implemented by SaltProc and this work \cite{rykhlevskii_modeling_2019}. The second model is one in which delayed neutrons no longer exist. This is beyond the greatest effects the delayed neutron precursor drift could have on depletion, so the absolute maximum effect of delayed neutron precursors on depletion results can be determined.
 
-Because the delayed neutron precursors are fission products or come from the decay of fission products, depletion must be performed. For reprocessing, the average feed rate from SaltProc is used with continuous direct linear reprocessing, while direct linear reprocessing is used for fission product removal.
+Because the delayed neutron precursors are fission products or come from the decay of fission products, depletion must be performed. For reprocessing, the average feed rate from SaltProc is used with continuous direct linear reprocessing, while direct linear reprocessing is used for fission product removal. 
 
-I investigated the impact on $k_{eff}$, and I determined that the delayed neutrons from fission products add roughly 20 pcm to $k_{eff}$ after 6,000 days of operation, which is roughly steady state operation.
+I investigated the impact on $k_{eff}$, and I determined that the delayed neutrons from fission products add roughly 20 pcm to $k_{eff}$ after 6,000 days of operation, which is roughly steady state operation. 
 This was determined by running the simulation with and without delayed neutrons enabled and comparing the $k_{eff}$ values.
 I also compared the masses of various isotopes, such as uranium-235 and thorium-232, though no statistically significant difference was found. Therefore, the net impact of delayed neutrons from fission product precursors appears to be negligible on the depletion results in this work, which agrees with the results from Zhou et al.
+
+%Figure \ref{fig:keff_compare} shows how the multiplication factors evolve over time. The final difference between the two values is FINALDIFF.
+
+%\begin{figure}[H]
+%  \centering
+%  \includegraphics[scale=0.7]{images/keff_dnp_compare.png}
+%  \caption{Comparison of $k_{eff}$ over time with and without delayed neutrons.}
+%   \label{fig:keff_compare}
+%\end{figure}
+
+%PLOT OF SPECTRUMS WITH AND WITHOUT DELAYED NEUTRONS
+
+%TABLE OF IMPORTANT ISOTOPE CONCENTRATIONS FOR WITH AND WITHOUT
+
+
+
+
+
+% Toggle remove this for debugging
+%\nocite{*}
+
 
