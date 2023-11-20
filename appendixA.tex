@@ -88,7 +88,7 @@ As the time approaches infinity, the steady state mass will be reached:
 m_{ss} = \lim_{t \rightarrow \infty} m(t).
 \hfill \end{equation}
 
-Because this is an iterative process, this means $n$ will be set to approach infinity as well to reach steady state.
+Because this is an iterative process, this means $n$ will be set to approach infinity to reach steady state.
 %Moving towards the goal of the steady state mass, the value of $n$ is taken to be approaching infinity.
 This is given by:
 
@@ -115,7 +115,7 @@ Next, I group the exponential terms together that have $j$ in the exponent, give
 m_{ss} = \alpha \sum_{j=1}^{\infty} \gamma^j e^{-\lambda_c \Delta t j} (e^{\lambda_c \Delta t} - 1).
 \hfill \end{equation}
 
-The terms which multiply but do not contain $j$ from the summation can be pulled outside of the summation, given by:
+The terms which multiply but do not contain $j$ from the summation can be pulled outside the summation, given by:
 
 \begin{equation} \hfill
 m_{ss} = \alpha (e^{\lambda_c \Delta t} - 1) \sum_{j=1}^{\infty} \gamma^j e^{-\lambda_c \Delta t j}.
@@ -138,5 +138,3 @@ Plugging in the variables $\alpha$ and $\gamma$ yields the full equation for the
 \begin{equation} \hfill 
 m_{ss} =  \frac{C}{\lambda - \lambda_r} \left(e^{(\lambda - \lambda_r) \Delta t} - 1 \right) \sum_{n=1}^{\infty} \left( \left(1 - \lambda_r \Delta t \right) e^{-(\lambda - \lambda_r) \Delta t} \right)^n.
 \hfill \end{equation}
-
-
